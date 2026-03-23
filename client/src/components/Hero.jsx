@@ -133,7 +133,7 @@ export default function Hero() {
         </motion.p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-7 mt-12 sm:mt-14 w-full sm:w-auto px-4 sm:px-2">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-3 sm:gap-7 mt-8 sm:mt-14 px-6 sm:px-2">
           {/* Explore Menu - Outlined */}
           <motion.a
             href="#menu"
@@ -142,8 +142,8 @@ export default function Hero() {
             animate="visible"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="cursor-pointer inline-flex items-center justify-center w-full sm:w-auto min-w-[200px] border-2 border-[#C0392B] bg-[#C0392B] text-white font-bold tracking-[0.15em] uppercase transition-all duration-300 ease-in-out hover:bg-[#a93226] hover:border-[#a93226]"
-            style={{ fontFamily: "'Oswald', sans-serif", fontSize: '17px', borderRadius: '50px', padding: '18px 48px', minHeight: '56px' }}
+            className="cursor-pointer inline-flex items-center justify-center w-auto min-w-[180px] sm:min-w-[200px] border-2 border-[#C0392B] bg-[#C0392B] text-white font-bold tracking-[0.15em] uppercase transition-all duration-300 ease-in-out hover:bg-[#a93226] hover:border-[#a93226]"
+            style={{ fontFamily: "'Oswald', sans-serif", fontSize: 'clamp(13px, 3.5vw, 17px)', borderRadius: '50px', padding: 'clamp(12px, 3vw, 18px) clamp(28px, 6vw, 48px)' }}
           >
             Explore Menu
           </motion.a>
@@ -156,8 +156,8 @@ export default function Hero() {
             animate="visible"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="group cursor-pointer inline-flex items-center justify-center gap-2 w-full sm:w-auto min-w-[200px] border-2 border-[#E67E22] bg-[#E67E22] text-white font-bold tracking-[0.15em] uppercase transition-all duration-300 ease-in-out hover:bg-[#C0392B] hover:border-[#C0392B] shadow-[0_4px_25px_rgba(230,126,34,0.5)] hover:shadow-[0_4px_25px_rgba(192,57,43,0.5)]"
-            style={{ fontFamily: "'Oswald', sans-serif", fontSize: '17px', borderRadius: '50px', padding: '18px 48px', minHeight: '56px' }}
+            className="group cursor-pointer inline-flex items-center justify-center gap-2 w-auto min-w-[180px] sm:min-w-[200px] border-2 border-[#E67E22] bg-[#E67E22] text-white font-bold tracking-[0.15em] uppercase transition-all duration-300 ease-in-out hover:bg-[#C0392B] hover:border-[#C0392B] shadow-[0_4px_25px_rgba(230,126,34,0.5)] hover:shadow-[0_4px_25px_rgba(192,57,43,0.5)]"
+            style={{ fontFamily: "'Oswald', sans-serif", fontSize: 'clamp(13px, 3.5vw, 17px)', borderRadius: '50px', padding: 'clamp(12px, 3vw, 18px) clamp(28px, 6vw, 48px)' }}
           >
             Order Now
             <HiArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
