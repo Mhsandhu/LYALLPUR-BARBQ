@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://lyallpur-barbq-production.up.railway.app';
 
 // Public API instance (no auth)
 export const publicApi = axios.create({
