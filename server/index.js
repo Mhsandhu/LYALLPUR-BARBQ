@@ -69,7 +69,14 @@ const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
 
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    // Allow no-origin requests (mobile apps, Postman, server-to-server)
+    if (!origin) return cb(null, true);
+    // Allow explicitly listed origins
+    if (allowedOrigins.includes(origin)) return cb(null, true);
+    // Allow any Vercel / Railway preview deployments
+    if (origin.endsWith('.vercel.app') || origin.endsWith('.railway.app')) return cb(null, true);
+    // Allow localhost for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return cb(null, true);
     cb(null, false);
   },
   credentials: true,
