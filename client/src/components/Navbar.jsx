@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiVolume2, FiVolumeX } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
+import { SoundContext } from '../context/SoundContext';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -39,9 +40,10 @@ const mobileLinkVariants = {
 };
 
 export default function Navbar() {
+  const { cartCount, openCart } = useCart();
+  const { muted, setMuted } = useContext(SoundContext);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { cartCount, openCart } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -118,6 +120,20 @@ export default function Navbar() {
               </motion.a>
             ))}
           </div>
+
+          {/* Sound Toggle (Desktop) */}
+          <motion.button
+            onClick={() => setMuted(m => !m)}
+            custom={navLinks.length}
+            initial="hidden"
+            animate="visible"
+            variants={navItemVariants}
+            className="hidden lg:inline-flex items-center justify-center cursor-pointer text-[#F5F5F0]/60 hover:text-[#D4AC0D] transition-colors duration-300"
+            style={{ background: 'none', border: 'none', padding: '8px' }}
+            title={muted ? 'Unmute sounds' : 'Mute sounds'}
+          >
+            {muted ? <FiVolumeX size={18} /> : <FiVolume2 size={18} />}
+          </motion.button>
 
           {/* Cart Button (Desktop) */}
           <motion.button

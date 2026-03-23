@@ -14,11 +14,15 @@ import { CartProvider } from './context/CartContext';
 import CartDrawer from './components/CartDrawer';
 import EmberCursor from './components/EmberCursor';
 import TouchFireBurst from './components/TouchFireBurst';
+import LoadingScreen from './components/LoadingScreen';
+import { SoundProvider } from './context/SoundContext';
 
 function App() {
   return (
+    <SoundProvider>
     <CartProvider>
     <BrowserRouter>
+      <LoadingScreen />
       <EmberCursor />
       <TouchFireBurst />
       <CartDrawer />
@@ -51,6 +55,7 @@ function App() {
       />
     </BrowserRouter>
     </CartProvider>
+    </SoundProvider>
   );
 }
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useSizzle } from '../context/SoundContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import publicApi from '../utils/api';
 import MenuItemModal from './MenuItemModal';
+import ThaalBuilder from './ThaalBuilder';
 
 const fallbackItems = [
   { name: 'Leg Piece', image: 'https://images.unsplash.com/photo-1610057099431-d73a1c9d2f2f?w=400&q=80', category: 'Chicken', price: 0 },
@@ -39,6 +41,7 @@ const cardVariants = {
 
 function MenuCard({ item, index, onClickItem }) {
   const imgSrc = item.image || '';
+  const playSizzle = useSizzle();
 
   const handleMouseMove = (e) => {
     const card = e.currentTarget;
@@ -78,12 +81,17 @@ function MenuCard({ item, index, onClickItem }) {
         willChange: 'transform',
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; }}
+      onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; playSizzle(); }}
+      onTouchStart={() => playSizzle()}
       onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'rgba(192,57,43,0)'; }}
       onClick={() => onClickItem(item)}
     >
       {/* Image */}
       <div className="relative overflow-hidden" style={{ height: '210px', background: '#1A1A1A' }}>
+        <div className="steam-particle" />
+        <div className="steam-particle" />
+        <div className="steam-particle" />
+        <div className="steam-particle" />
         <img
           src={imgSrc}
           alt={item.name}
@@ -161,6 +169,7 @@ export default function MenuSection() {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [thaalOpen, setThaalOpen] = useState(false);
 
   useEffect(() => {
     publicApi.get('/menu')
@@ -227,6 +236,33 @@ export default function MenuSection() {
           >
             Mix and match — your order, your way
           </p>
+
+          {/* Build Your Thaal CTA */}
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setThaalOpen(true)}
+            style={{
+              marginTop: '22px',
+              fontFamily: "'Oswald', sans-serif",
+              fontSize: 'clamp(13px, 3vw, 15px)',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #C0392B, #E67E22)',
+              border: 'none',
+              borderRadius: '50px',
+              padding: 'clamp(12px, 3vw, 16px) clamp(28px, 6vw, 44px)',
+              color: 'white',
+              cursor: 'pointer',
+              boxShadow: '0 4px 24px rgba(192,57,43,0.45)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            Build Your Thaal
+          </motion.button>
         </div>
 
         {/* Filter Tabs */}
@@ -287,6 +323,12 @@ export default function MenuSection() {
           </AnimatePresence>
         )}
       </div>
+
+      <ThaalBuilder
+        menuItems={menuItems}
+        isOpen={thaalOpen}
+        onClose={() => setThaalOpen(false)}
+      />
 
       <MenuItemModal
         item={selectedItem}
