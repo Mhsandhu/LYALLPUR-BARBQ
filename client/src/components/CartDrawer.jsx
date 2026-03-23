@@ -176,7 +176,8 @@ Delivery: ${deliveryCharge > 0 ? `Rs. ${deliveryCharge}` : 'Free'}
 
 _Order placed via Lyallpur BarBQ website_`;
 
-    window.open(`https://wa.me/923706050759?text=${encodeURIComponent(msg)}`, '_blank');
+    const waNum = (siteSettings?.whatsapp || '+923706050759').replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   const handleWhatsApp = () => {
