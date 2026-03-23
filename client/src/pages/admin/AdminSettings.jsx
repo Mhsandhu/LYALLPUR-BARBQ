@@ -1,8 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FiSave } from 'react-icons/fi';
+import { FiSave, FiUpload } from 'react-icons/fi';
 import { adminApi as api } from '../../utils/api';
+
+const compressImage = (file, maxWidth = 400, quality = 0.8) =>
+  new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = url;
+  });
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', padding: '28px', marginBottom: '24px' };
 const inputStyle = { background: '#1A1A1A', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '8px', padding: '12px 14px', color: 'white', fontFamily: "'Lora', serif", fontSize: '0.9rem', outline: 'none', width: '100%' };
@@ -108,33 +124,45 @@ export default function AdminSettings() {
       {/* Founders / Owners */}
       <div style={cardStyle}>
         <h3 className="text-white font-bold mb-5" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.05rem', borderLeft: '3px solid #C0392B', paddingLeft: '12px' }}>Founders</h3>
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label style={labelStyle}>Owner 1 — Name</label>
-              <input value={settings.owner1Name || ''} onChange={e => updateField('owner1Name', e.target.value)} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Owner 1 — Photo URL</label>
-              <input value={settings.owner1Photo || ''} onChange={e => updateField('owner1Photo', e.target.value)} style={inputStyle} placeholder="Paste image URL" />
-            </div>
-          </div>
-          {settings.owner1Photo && (
-            <div><img src={settings.owner1Photo} alt="Owner 1" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(192,57,43,0.3)' }} onError={e => { e.target.style.display = 'none'; }} /></div>
-          )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label style={labelStyle}>Owner 2 — Name</label>
-              <input value={settings.owner2Name || ''} onChange={e => updateField('owner2Name', e.target.value)} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Owner 2 — Photo URL</label>
-              <input value={settings.owner2Photo || ''} onChange={e => updateField('owner2Photo', e.target.value)} style={inputStyle} placeholder="Paste image URL" />
+        <div className="space-y-6">
+          {/* Owner 1 */}
+          <div className="space-y-3">
+            <label style={labelStyle}>Owner 1 — Name</label>
+            <input value={settings.owner1Name || ''} onChange={e => updateField('owner1Name', e.target.value)} style={inputStyle} />
+            <label style={labelStyle}>Owner 1 — Photo</label>
+            <div className="flex items-center gap-3">
+              {settings.owner1Photo && (
+                <img src={settings.owner1Photo} alt="Owner 1" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(192,57,43,0.4)', flexShrink: 0 }} onError={e => { e.target.style.display = 'none'; }} />
+              )}
+              <label className="cursor-pointer flex items-center gap-2" style={{ background: '#C0392B', color: 'white', border: 'none', borderRadius: '8px', padding: '10px 16px', fontFamily: "'Oswald', sans-serif", fontSize: '0.8rem', letterSpacing: '0.05em', flexShrink: 0 }}>
+                <FiUpload size={14} /> Upload Photo
+                <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                  const f = e.target.files[0];
+                  if (f) { const b64 = await compressImage(f); updateField('owner1Photo', b64); }
+                }} />
+              </label>
+              <input value={settings.owner1Photo?.startsWith('data:') ? '(uploaded)' : (settings.owner1Photo || '')} onChange={e => updateField('owner1Photo', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Or paste image URL" />
             </div>
           </div>
-          {settings.owner2Photo && (
-            <div><img src={settings.owner2Photo} alt="Owner 2" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(192,57,43,0.3)' }} onError={e => { e.target.style.display = 'none'; }} /></div>
-          )}
+          {/* Owner 2 */}
+          <div className="space-y-3">
+            <label style={labelStyle}>Owner 2 — Name</label>
+            <input value={settings.owner2Name || ''} onChange={e => updateField('owner2Name', e.target.value)} style={inputStyle} />
+            <label style={labelStyle}>Owner 2 — Photo</label>
+            <div className="flex items-center gap-3">
+              {settings.owner2Photo && (
+                <img src={settings.owner2Photo} alt="Owner 2" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(192,57,43,0.4)', flexShrink: 0 }} onError={e => { e.target.style.display = 'none'; }} />
+              )}
+              <label className="cursor-pointer flex items-center gap-2" style={{ background: '#C0392B', color: 'white', border: 'none', borderRadius: '8px', padding: '10px 16px', fontFamily: "'Oswald', sans-serif", fontSize: '0.8rem', letterSpacing: '0.05em', flexShrink: 0 }}>
+                <FiUpload size={14} /> Upload Photo
+                <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                  const f = e.target.files[0];
+                  if (f) { const b64 = await compressImage(f); updateField('owner2Photo', b64); }
+                }} />
+              </label>
+              <input value={settings.owner2Photo?.startsWith('data:') ? '(uploaded)' : (settings.owner2Photo || '')} onChange={e => updateField('owner2Photo', e.target.value)} style={{ ...inputStyle, flex: 1 }} placeholder="Or paste image URL" />
+            </div>
+          </div>
         </div>
       </div>
 

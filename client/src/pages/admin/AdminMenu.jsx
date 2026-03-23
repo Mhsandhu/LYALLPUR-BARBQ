@@ -4,7 +4,23 @@ import toast from 'react-hot-toast';
 import { FiPlus, FiEdit2, FiTrash2, FiX, FiUpload, FiLink } from 'react-icons/fi';
 import { adminApi as api } from '../../utils/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_BASE = import.meta.env.MODE === 'production' ? 'https://lyallpur-barbq-production.up.railway.app' : '';
+
+const compressImage = (file, maxWidth = 800, quality = 0.75) =>
+  new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = url;
+  });
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', overflow: 'hidden' };
 const inputStyle = { background: '#1A1A1A', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '8px', padding: '12px 14px', color: 'white', fontFamily: "'Lora', serif", fontSize: '0.9rem', outline: 'none', width: '100%' };
@@ -98,9 +114,14 @@ function MenuItemModal({ item, onClose, onSaved }) {
   const [isAvailable, setIsAvailable] = useState(item?.isAvailable !== false);
   const [saving, setSaving] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const f = e.target.files[0];
-    if (f) { setFile(f); setPreview(URL.createObjectURL(f)); }
+    if (f) {
+      setFile(f);
+      const base64 = await compressImage(f);
+      setPreview(base64);
+      setImageUrl(base64);
+    }
   };
 
   const handleUrlChange = (val) => {
@@ -118,11 +139,7 @@ function MenuItemModal({ item, onClose, onSaved }) {
       formData.append('price', price);
       formData.append('description', description.trim());
       formData.append('isAvailable', isAvailable);
-      if (imageMode === 'file' && file) {
-        formData.append('image', file);
-      } else {
-        formData.append('imageUrl', imageUrl);
-      }
+      formData.append('imageUrl', imageUrl);
 
       if (item) {
         await api.put(`/menu/${item._id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
