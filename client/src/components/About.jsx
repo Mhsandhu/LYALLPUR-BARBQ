@@ -91,33 +91,66 @@ export default function About() {
             viewport={{ once: true }}
             className="w-full lg:w-[45%] relative"
           >
-            <div className="relative mb-8">
-              <span
+              {/* Atmospheric food image panel */}
+            <div
+              className="relative overflow-hidden"
+              style={{
+                borderRadius: '12px',
+                height: 'clamp(320px, 45vw, 520px)',
+                background: '#111',
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1544025162-d76694265947?w=900&q=85"
+                alt="Lyallpur BBQ"
                 style={{
-                  fontFamily: "'Oswald', sans-serif",
-                  fontSize: '6rem',
-                  fontWeight: 700,
-                  color: '#C0392B',
-                  opacity: 0.15,
-                  lineHeight: 1,
-                  display: 'block',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  opacity: 0.75,
                 }}
-              >
-                EST.
-              </span>
-              <span
-                style={{
-                  fontFamily: "'Cinzel Decorative', serif",
-                  fontSize: 'clamp(3rem, 6vw, 5rem)',
-                  fontWeight: 700,
-                  color: '#D4AC0D',
-                  lineHeight: 1,
-                  display: 'block',
-                  marginTop: '-20px',
-                }}
-              >
-                2018
-              </span>
+              />
+              {/* Dark gradient on bottom */}
+              <div
+                className="absolute inset-0"
+                style={{ background: 'linear-gradient(to top, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.2) 50%, transparent 100%)' }}
+              />
+              {/* EST. badge top-left */}
+              <div className="absolute top-5 left-5">
+                <span
+                  style={{
+                    fontFamily: "'Oswald', sans-serif",
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.35em',
+                    color: '#D4AC0D',
+                    textTransform: 'uppercase',
+                    background: 'rgba(8,8,8,0.6)',
+                    backdropFilter: 'blur(6px)',
+                    padding: '6px 14px',
+                    borderRadius: '50px',
+                    border: '1px solid rgba(212,172,13,0.3)',
+                  }}
+                >
+                  Est. Faisalabad, 2018
+                </span>
+              </div>
+              {/* Quote bottom */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <p
+                  style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+                    fontStyle: 'italic',
+                    color: '#F5F5F0',
+                    lineHeight: 1.5,
+                    marginBottom: '10px',
+                  }}
+                >
+                  "Coal-fired. Soul-inspired."  
+                </p>
+                <div style={{ width: '40px', height: '2px', background: '#C0392B' }} />
+              </div>
             </div>
           </motion.div>
 

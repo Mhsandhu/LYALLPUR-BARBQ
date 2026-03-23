@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { HiArrowRight, HiChevronDown } from 'react-icons/hi';
 import EmberParticles from './EmberParticles';
 import { useCart } from '../context/CartContext';
@@ -47,6 +47,9 @@ const buttonSpring = (delay) => ({
 export default function Hero() {
   const { openCart } = useCart();
   const allWords = [...headlineWords, ...headlineWords2];
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 700], ['0%', '22%']);
+  const bgScale = useTransform(scrollY, [0, 700], [1.04, 1.12]);
 
   return (
     <section
@@ -55,6 +58,18 @@ export default function Hero() {
     >
       {/* Background base */}
       <div className="absolute inset-0 bg-[#080808]" />
+
+      {/* Cinematic food photo background with parallax */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.img
+          src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=1920&q=80"
+          alt=""
+          className="w-full h-full"
+          style={{ objectFit: 'cover', objectPosition: 'center 40%', opacity: 0.28, y: bgY, scale: bgScale }}
+        />
+        {/* Multi-stop overlay: darkens edges, keeps glow in center */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,8,0.75) 0%, rgba(8,8,8,0.5) 40%, rgba(8,8,8,0.6) 70%, rgba(8,8,8,0.85) 100%)' }} />
+      </div>
 
       {/* Radial ember glow at bottom */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_at_center,_rgba(192,57,43,0.15)_0%,_transparent_70%)] pointer-events-none" />
@@ -120,6 +135,7 @@ export default function Hero() {
             </motion.span>
           ))}
         </div>
+
 
         {/* Subheadline */}
         <motion.p

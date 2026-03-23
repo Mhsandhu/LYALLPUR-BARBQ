@@ -12,11 +12,15 @@ import AdminSettings from './pages/admin/AdminSettings';
 import { Toaster } from 'react-hot-toast';
 import { CartProvider } from './context/CartContext';
 import CartDrawer from './components/CartDrawer';
+import EmberCursor from './components/EmberCursor';
+import TouchFireBurst from './components/TouchFireBurst';
 
 function App() {
   return (
     <CartProvider>
     <BrowserRouter>
+      <EmberCursor />
+      <TouchFireBurst />
       <CartDrawer />
       <Routes>
         <Route path="/" element={<Home />} />

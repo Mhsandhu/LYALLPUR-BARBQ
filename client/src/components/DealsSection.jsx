@@ -46,6 +46,26 @@ function DealBadge({ number }) {
 function DealCard({ deal, index, onClickDeal }) {
   const dealItems = Array.isArray(deal.items) ? deal.items : (deal.items || '').split(', ').filter(Boolean);
   const displayPrice = typeof deal.price === 'number' ? deal.price.toLocaleString() : deal.price;
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotY = ((x - cx) / cx) * 7;
+    const rotX = ((cy - y) / cy) * 7;
+    card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02) translateY(-8px)`;
+    card.style.boxShadow = `${-rotY * 2}px ${rotX * 2}px 40px rgba(192,57,43,0.2), 0 25px 50px rgba(0,0,0,0.5)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale3d(1,1,1) translateY(0)';
+    card.style.boxShadow = 'none';
+  };
+
   return (
     <motion.div
       custom={index}
@@ -59,8 +79,11 @@ function DealCard({ deal, index, onClickDeal }) {
         border: '1px solid rgba(192,57,43,0.25)',
         borderRadius: '12px',
         padding: '28px',
-        transition: 'all 0.4s ease',
+        transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.35s ease',
+        willChange: 'transform',
       }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onClick={() => onClickDeal(deal)}
     >
       <DealBadge number={deal.dealId || deal.id} />

@@ -39,6 +39,26 @@ const cardVariants = {
 
 function MenuCard({ item, index, onClickItem }) {
   const imgSrc = item.image || '';
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotY = ((x - cx) / cx) * 9;
+    const rotX = ((cy - y) / cy) * 9;
+    card.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03) translateY(-6px)`;
+    card.style.boxShadow = `${-rotY * 1.5}px ${rotX * 1.5}px 30px rgba(192,57,43,0.25), 0 20px 40px rgba(0,0,0,0.4)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1) translateY(0)';
+    card.style.boxShadow = 'none';
+  };
+
   return (
     <motion.div
       custom={index}
@@ -51,14 +71,19 @@ function MenuCard({ item, index, onClickItem }) {
       style={{
         background: '#141414',
         border: '1px solid rgba(192,57,43,0.2)',
+        borderTop: '3px solid rgba(192,57,43,0)',
         borderRadius: '10px',
         overflow: 'hidden',
-        transition: 'all 0.3s ease',
+        transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-top-color 0.3s ease',
+        willChange: 'transform',
       }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; }}
+      onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'rgba(192,57,43,0)'; }}
       onClick={() => onClickItem(item)}
     >
       {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: '160px', background: '#1A1A1A' }}>
+      <div className="relative overflow-hidden" style={{ height: '210px', background: '#1A1A1A' }}>
         <img
           src={imgSrc}
           alt={item.name}
