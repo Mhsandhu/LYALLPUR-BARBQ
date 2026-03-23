@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import publicApi from '../utils/api';
 
 export default function AnnouncementBanner() {
   const [text, setText] = useState('');
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    axios.get('/api/settings')
+    publicApi.get('/settings')
       .then(res => {
         if (res.data.announcementEnabled && res.data.announcementText) {
           setText(res.data.announcementText);

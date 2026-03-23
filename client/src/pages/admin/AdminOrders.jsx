@@ -1,15 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FiSearch, FiDownload, FiChevronDown, FiChevronUp, FiTrash2, FiCheck } from 'react-icons/fi';
-
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+import { adminApi as api } from '../../utils/api';
 
 const allStatuses = ['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered', 'cancelled'];
 const statusColors = {

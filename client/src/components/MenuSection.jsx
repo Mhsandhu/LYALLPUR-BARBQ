@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import publicApi from '../utils/api';
 import MenuItemModal from './MenuItemModal';
 
 const fallbackItems = [
@@ -138,7 +138,7 @@ export default function MenuSection() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/menu')
+    publicApi.get('/menu')
       .then(res => {
         const available = res.data.filter(item => item.isAvailable !== false);
         if (available.length > 0) {

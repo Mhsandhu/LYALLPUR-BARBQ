@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FiPlus, FiEdit2, FiTrash2, FiX, FiUpload, FiLink } from 'react-icons/fi';
+import { adminApi as api } from '../../utils/api';
 
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', overflow: 'hidden' };
 const inputStyle = { background: '#1A1A1A', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '8px', padding: '12px 14px', color: 'white', fontFamily: "'Lora', serif", fontSize: '0.9rem', outline: 'none', width: '100%' };
@@ -57,7 +52,7 @@ export default function AdminMenu() {
           <div key={item._id} style={{ ...cardStyle, opacity: item.isAvailable ? 1 : 0.5 }}>
             <div style={{ height: '140px', background: '#1A1A1A', position: 'relative' }}>
               {item.image ? (
-                <img src={item.image.startsWith('/') ? `http://localhost:5000${item.image}` : item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
+                <img src={item.image.startsWith('/') ? `${API_BASE}${item.image}` : item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
               ) : (
                 <div className="flex items-center justify-center h-full" style={{ color: '#444', fontFamily: "'Lora', serif", fontSize: '0.8rem', fontStyle: 'italic' }}>No image</div>
               )}
@@ -129,13 +124,10 @@ function MenuItemModal({ item, onClose, onSaved }) {
         formData.append('imageUrl', imageUrl);
       }
 
-      const token = localStorage.getItem('lbq_admin_token');
-      const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' };
-
       if (item) {
-        await axios.put(`/api/menu/${item._id}`, formData, { headers });
+        await api.put(`/menu/${item._id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       } else {
-        await axios.post('/api/menu', formData, { headers });
+        await api.post('/menu', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       toast.success(item ? 'Item updated' : 'Item added');
       onSaved();
@@ -181,7 +173,7 @@ function MenuItemModal({ item, onClose, onSaved }) {
             {imageMode === 'file' && <input type="file" accept="image/*" onChange={handleFileChange} style={{ ...inputS, padding: '10px' }} />}
             {preview && (
               <div className="mt-3" style={{ borderRadius: '8px', overflow: 'hidden', height: '120px', background: '#1A1A1A' }}>
-                <img src={preview.startsWith('/') ? `http://localhost:5000${preview}` : preview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
+                <img src={preview.startsWith('/') ? `${API_BASE}${preview}` : preview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
               </div>
             )}
           </div>

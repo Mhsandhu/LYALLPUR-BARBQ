@@ -1,14 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FiSearch, FiX } from 'react-icons/fi';
-
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+import { adminApi as api } from '../../utils/api';
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', padding: '24px' };
 const inputStyle = { background: '#1A1A1A', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '8px', padding: '10px 14px', color: 'white', fontFamily: "'Lora', serif", fontSize: '0.85rem', outline: 'none' };

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import publicApi from '../../utils/api';
 import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
 export default function AdminLogin() {
@@ -16,7 +16,7 @@ export default function AdminLogin() {
     if (!password.trim()) { toast.error('Enter password'); return; }
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/admin/login', { password });
+      const { data } = await publicApi.post('/admin/login', { password });
       localStorage.setItem('lbq_admin_token', data.token);
       toast.success('Welcome back!');
       navigate('/dashboard-lbq-a8f2c9d1/overview');

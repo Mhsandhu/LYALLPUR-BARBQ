@@ -1,17 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
-
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+import { adminApi as api } from '../../utils/api';
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', padding: '24px' };
 const COLORS = ['#C0392B', '#E67E22', '#D4AC0D', '#27AE60', '#3498DB', '#9B59B6'];

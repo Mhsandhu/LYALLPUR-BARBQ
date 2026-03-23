@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiPhone, FiMapPin, FiClock } from 'react-icons/fi';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa';
-import axios from 'axios';
+import publicApi from '../utils/api';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -19,7 +19,7 @@ export default function Contact() {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/settings').then(r => setSettings(r.data)).catch(() => {});
+    publicApi.get('/settings').then(r => setSettings(r.data)).catch(() => {});
   }, []);
 
   const address = settings?.address || 'Faisalabad, Pakistan';

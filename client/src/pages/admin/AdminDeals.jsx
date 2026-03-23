@@ -1,15 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FiEdit2, FiX } from 'react-icons/fi';
-
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+import { adminApi as api } from '../../utils/api';
 
 const cardStyle = { background: '#141414', border: '1px solid rgba(192,57,43,0.2)', borderRadius: '12px', padding: '24px' };
 
@@ -85,7 +78,7 @@ function EditDealModal({ deal, onClose, onSaved }) {
     setSaving(true);
     try {
       const token = localStorage.getItem('lbq_admin_token');
-      await axios.put(`/api/deals/${deal._id}`, { dealName, price: Number(price), items, isActive }, { headers: { Authorization: `Bearer ${token}` } });
+      await api.put(`/deals/${deal._id}`, { dealName, price: Number(price), items, isActive });
       toast.success('Deal updated');
       onSaved();
     } catch { toast.error('Save failed'); }

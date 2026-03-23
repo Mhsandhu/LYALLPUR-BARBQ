@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiMinus, FiPlus, FiTrash2, FiShoppingBag, FiCheck } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import axios from 'axios';
+import publicApi from '../utils/api';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 
@@ -55,7 +55,7 @@ export default function CartDrawer() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    axios.get('/api/settings').then(r => setSiteSettings(r.data)).catch(() => {});
+    publicApi.get('/settings').then(r => setSiteSettings(r.data)).catch(() => {});
   }, []);
 
   const settingsDeliveryCharge = siteSettings?.deliveryCharge ?? 100;
@@ -136,7 +136,7 @@ export default function CartDrawer() {
         subtotal: cartTotal,
         locationLink: locationLink.trim(),
       };
-      const { data } = await axios.post('/api/orders', body);
+      const { data } = await publicApi.post('/orders', body);
       setSuccessOrder({ orderNumber: data.orderNumber, phone: phone.trim() });
       clearCart();
       resetForm();

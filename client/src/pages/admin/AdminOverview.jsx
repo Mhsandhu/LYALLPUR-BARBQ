@@ -1,14 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FiShoppingBag, FiDollarSign, FiClock, FiTrendingUp } from 'react-icons/fi';
-
-const api = axios.create({ baseURL: '/api' });
-api.interceptors.request.use((cfg) => {
-  const t = localStorage.getItem('lbq_admin_token');
-  if (t) cfg.headers.Authorization = `Bearer ${t}`;
-  return cfg;
-});
+import { adminApi as api } from '../../utils/api';
 
 const statusColors = {
   pending: { bg: 'rgba(241,196,15,0.15)', text: '#F1C40F' },

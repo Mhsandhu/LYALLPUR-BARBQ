@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import publicApi from '../utils/api';
 import DealDetailModal from './DealDetailModal';
 
 const cardVariants = {
@@ -147,7 +147,7 @@ export default function DealsSection() {
   const [selectedDeal, setSelectedDeal] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/deals')
+    publicApi.get('/deals')
       .then(res => {
         const active = res.data.filter(d => d.isActive !== false);
         setDeals(active);

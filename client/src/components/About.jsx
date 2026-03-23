@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiStar, FiAward, FiUser } from 'react-icons/fi';
 import { FaFire } from 'react-icons/fa';
-import axios from 'axios';
+import publicApi from '../utils/api';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -71,7 +71,7 @@ export default function About() {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/settings').then(r => setSettings(r.data)).catch(() => {});
+    publicApi.get('/settings').then(r => setSettings(r.data)).catch(() => {});
   }, []);
 
   const owner1Name = settings?.owner1Name || 'Moiz Ur Rehman Khalid';
