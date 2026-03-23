@@ -119,19 +119,6 @@ export default function About() {
                 2018
               </span>
             </div>
-            <div
-              className="flex items-center justify-center"
-              style={{
-                background: '#141414',
-                border: '1px solid rgba(192,57,43,0.2)',
-                borderRadius: '12px',
-                height: '300px',
-              }}
-            >
-              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.95rem', color: '#666660', fontStyle: 'italic' }}>
-                Your Restaurant Photo Here
-              </p>
-            </div>
           </motion.div>
 
           {/* Right Column — 55% */}

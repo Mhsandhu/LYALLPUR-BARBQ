@@ -137,6 +137,8 @@ export default function CartDrawer() {
         locationLink: locationLink.trim(),
       };
       const { data } = await publicApi.post('/orders', body);
+      // Also open WhatsApp with order summary
+      sendWhatsApp();
       setSuccessOrder({ orderNumber: data.orderNumber, phone: phone.trim() });
       clearCart();
       resetForm();
@@ -147,35 +149,39 @@ export default function CartDrawer() {
     }
   };
 
-  const handleWhatsApp = () => {
-    if (!validate(true)) return;
+  const sendWhatsApp = () => {
     const itemLines = cart.map(c => {
       const priceStr = c.price > 0 ? ` — Rs. ${(c.price * c.quantity).toLocaleString()}` : '';
       return `• ${c.type === 'deal' ? '[Deal] ' : ''}${c.name} x${c.quantity}${priceStr}`;
     }).join('\n');
 
-    const msg = `🔥 *LYALLPUR BARBQ — NEW ORDER* 🔥
+    const msg = `*LYALLPUR BARBQ — NEW ORDER*
 
-👤 *Name:* ${customerName.trim()}
-📞 *Phone:* ${phone.trim()}
-🛵 *Order Type:* ${orderType === 'delivery' ? 'Delivery' : 'Takeaway'}${orderType === 'delivery' ? `\n📍 *Address:* ${address.trim()}` : ''}${locationLink.trim() ? `\n🗺️ *Location:* ${locationLink.trim()}` : `\n🗺️ *Location:* Not provided`}
+*Name:* ${customerName.trim()}
+*Phone:* ${phone.trim()}
+*Order Type:* ${orderType === 'delivery' ? 'Delivery' : 'Takeaway'}${orderType === 'delivery' ? `\n*Address:* ${address.trim()}` : ''}${locationLink.trim() ? `\n*Location:* ${locationLink.trim()}` : ''}
 
 ━━━━━━━━━━━━━━━━━
-🍖 *ORDER DETAILS:*
+*ORDER DETAILS:*
 ━━━━━━━━━━━━━━━━━
 ${itemLines}
 
 ━━━━━━━━━━━━━━━━━
-💰 Subtotal: Rs. ${cartTotal.toLocaleString()}
-🚚 Delivery: ${deliveryCharge > 0 ? `Rs. ${deliveryCharge}` : 'Free'}
-💰 *TOTAL: Rs. ${grandTotal.toLocaleString()}*
+Subtotal: Rs. ${cartTotal.toLocaleString()}
+Delivery: ${deliveryCharge > 0 ? `Rs. ${deliveryCharge}` : 'Free'}
+*TOTAL: Rs. ${grandTotal.toLocaleString()}*
 ━━━━━━━━━━━━━━━━━
 
-📝 *Notes:* ${specialInstructions.trim() || 'None'}
+*Notes:* ${specialInstructions.trim() || 'None'}
 
 _Order placed via Lyallpur BarBQ website_`;
 
     window.open(`https://wa.me/923706050759?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const handleWhatsApp = () => {
+    if (!validate(true)) return;
+    sendWhatsApp();
   };
 
   const handleNewOrder = () => {
