@@ -1,19 +1,82 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+function playIntroSound() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    const ctx = new AC();
+    const master = ctx.createGain();
+    master.gain.value = 0.85;
+    master.connect(ctx.destination);
+    const now = ctx.currentTime;
+
+    // 1. Cinematic whoosh — noise sweep high→low
+    const wBuf = ctx.createBuffer(1, ctx.sampleRate * 1.2, ctx.sampleRate);
+    const wd = wBuf.getChannelData(0);
+    for (let i = 0; i < wd.length; i++) wd[i] = (Math.random() * 2 - 1);
+    const wSrc = ctx.createBufferSource();
+    wSrc.buffer = wBuf;
+    const wf = ctx.createBiquadFilter();
+    wf.type = 'bandpass'; wf.frequency.value = 2000; wf.Q.value = 0.4;
+    const wg = ctx.createGain();
+    wg.gain.setValueAtTime(0, now);
+    wg.gain.linearRampToValueAtTime(0.4, now + 0.15);
+    wg.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+    wf.frequency.setValueAtTime(3500, now);
+    wf.frequency.exponentialRampToValueAtTime(400, now + 1.0);
+    wSrc.connect(wf); wf.connect(wg); wg.connect(master);
+    wSrc.start(now); wSrc.stop(now + 1.2);
+
+    // 2. Deep cinematic BOOM — low sine punch
+    const boom = ctx.createOscillator();
+    boom.type = 'sine';
+    boom.frequency.setValueAtTime(80, now + 0.3);
+    boom.frequency.exponentialRampToValueAtTime(38, now + 1.0);
+    const bg = ctx.createGain();
+    bg.gain.setValueAtTime(0, now + 0.3);
+    bg.gain.linearRampToValueAtTime(0.7, now + 0.38);
+    bg.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+    boom.connect(bg); bg.connect(master);
+    boom.start(now + 0.3); boom.stop(now + 1.7);
+
+    // 3. Sparkle ring — high sine shimmer on logo reveal
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const sp = ctx.createOscillator();
+      sp.type = 'sine'; sp.frequency.value = freq;
+      const sg = ctx.createGain();
+      sg.gain.setValueAtTime(0, now + 0.55 + i * 0.08);
+      sg.gain.linearRampToValueAtTime(0.06, now + 0.65 + i * 0.08);
+      sg.gain.exponentialRampToValueAtTime(0.0001, now + 1.8 + i * 0.1);
+      sp.connect(sg); sg.connect(master);
+      sp.start(now + 0.55 + i * 0.08);
+      sp.stop(now + 2);
+    });
+
+    setTimeout(() => ctx.close(), 3000);
+  } catch (_) {}
+}
+
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(() => !sessionStorage.getItem('lbq_loaded'));
+  const [entered, setEntered] = useState(false);
   const [wiping, setWiping] = useState(false);
 
+  const handleEnter = () => {
+    if (entered) return;
+    setEntered(true);
+    playIntroSound();
+  };
+
   useEffect(() => {
-    if (!visible) return;
+    if (!entered) return;
     const t1 = setTimeout(() => setWiping(true), 1900);
     const t2 = setTimeout(() => {
       setVisible(false);
       sessionStorage.setItem('lbq_loaded', '1');
     }, 2700);
     return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [visible]);
+  }, [entered]);
 
   if (!visible) return null;
 
@@ -24,12 +87,15 @@ export default function LoadingScreen() {
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
+        onClick={handleEnter}
+        onTouchStart={handleEnter}
         style={{
           position: 'fixed', inset: 0, zIndex: 999999,
           background: '#040404',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           overflow: 'hidden',
+          cursor: entered ? 'default' : 'pointer',
         }}
       >
         {/* Ember particles bg */}
@@ -65,6 +131,29 @@ export default function LoadingScreen() {
           background: 'radial-gradient(ellipse at center, rgba(192,57,43,0.18) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
+
+        {/* Tap to Enter — shown before interaction */}
+        <AnimatePresence>
+          {!entered && (
+            <motion.div
+              key="tap"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.3, 0.9, 0.3] }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute', bottom: '48px', left: '50%',
+                transform: 'translateX(-50%)',
+                fontFamily: "'Oswald', sans-serif",
+                fontSize: '0.75rem', letterSpacing: '0.45em',
+                color: '#C0392B', textTransform: 'uppercase',
+                zIndex: 3, pointerEvents: 'none', whiteSpace: 'nowrap',
+              }}
+            >
+              Tap to Enter
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>

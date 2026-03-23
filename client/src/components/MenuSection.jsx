@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSizzle } from '../context/SoundContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import publicApi from '../utils/api';
 import MenuItemModal from './MenuItemModal';
@@ -34,15 +33,13 @@ const cardVariants = {
   visible: (i) => ({
     opacity: 1,
     scale: 1,
-    transition: { delay: i * 0.08, duration: 0.35, ease: 'easeOut' },
+    transition: { delay: i * 0.03, duration: 0.18, ease: 'easeOut' },
   }),
-  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.15 } },
 };
 
 function MenuCard({ item, index, onClickItem }) {
   const imgSrc = item.image || '';
-  const playSizzle = useSizzle();
-
   const handleMouseMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -69,7 +66,7 @@ function MenuCard({ item, index, onClickItem }) {
       initial="hidden"
       whileInView="visible"
       exit="exit"
-      viewport={{ once: true, margin: '-30px' }}
+      viewport={{ once: true, margin: '60px' }}
       className="menu-item-card cursor-pointer"
       style={{
         background: '#141414',
@@ -81,8 +78,7 @@ function MenuCard({ item, index, onClickItem }) {
         willChange: 'transform',
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; playSizzle(); }}
-      onTouchStart={() => playSizzle()}
+      onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; }}
       onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'rgba(192,57,43,0)'; }}
       onClick={() => onClickItem(item)}
     >

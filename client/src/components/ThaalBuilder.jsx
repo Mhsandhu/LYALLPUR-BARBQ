@@ -65,7 +65,7 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
             style={{
               width: '100%', maxWidth: '860px',
               padding: 'clamp(20px, 4vw, 40px)',
-              paddingBottom: '120px',
+              paddingBottom: '160px',
             }}
           >
             {/* Header */}
