@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import publicApi from '../utils/api';
 import toast from 'react-hot-toast';
 import { FiPhone, FiMapPin, FiClock, FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
@@ -127,7 +127,7 @@ export default function OrderSection() {
         specialInstructions: specialInstructions.trim(),
         subtotal: cartTotal,
       };
-      const { data } = await axios.post('/api/orders', body);
+      const { data } = await publicApi.post('/orders', body);
       setSuccessOrder({ orderNumber: data.orderNumber, phone: phone.trim() });
       resetForm();
       clearCart();
