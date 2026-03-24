@@ -84,7 +84,7 @@ export default function TouchFireBurst() {
         const onButton = isButton(e.target);
 
         spawnRipple(x, y);
-        spawnEmbers(x, y, onButton ? 18 : 10);
+        spawnEmbers(x, y, onButton ? 8 : 5);
 
         if (onButton && navigator.vibrate) {
           navigator.vibrate(30);

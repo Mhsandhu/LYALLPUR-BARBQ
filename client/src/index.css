@@ -328,47 +328,6 @@ html, body {
   opacity: 1;
 }
 
-/* ===== Steam / Smoke Effect on Menu Card Hover ===== */
-@keyframes steam-rise {
-  0%   { transform: translateY(0) translateX(0) scale(0.7);    opacity: 0; }
-  12%  { opacity: 0.55; }
-  55%  { transform: translateY(-52px) translateX(var(--sd, 9px)) scale(1.6);  opacity: 0.22; }
-  100% { transform: translateY(-95px) translateX(var(--sd2,-5px)) scale(0.5); opacity: 0; }
-}
-
-.steam-particle {
-  position: absolute;
-  bottom: 6px;
-  width: 24px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(255, 210, 160, 0.22);
-  filter: blur(8px);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.menu-item-card:hover .steam-particle:nth-child(1) {
-  left: 15%;
-  animation: steam-rise 1.9s ease-out 0s infinite;
-  --sd: 11px; --sd2: -7px;
-}
-.menu-item-card:hover .steam-particle:nth-child(2) {
-  left: 36%;
-  animation: steam-rise 1.9s ease-out 0.38s infinite;
-  --sd: -9px; --sd2: 13px;
-}
-.menu-item-card:hover .steam-particle:nth-child(3) {
-  left: 57%;
-  animation: steam-rise 1.9s ease-out 0.76s infinite;
-  --sd: 14px; --sd2: -6px;
-}
-.menu-item-card:hover .steam-particle:nth-child(4) {
-  left: 76%;
-  animation: steam-rise 1.9s ease-out 1.14s infinite;
-  --sd: -11px; --sd2: 9px;
-}
 
 @keyframes particle-rise {
   0% {

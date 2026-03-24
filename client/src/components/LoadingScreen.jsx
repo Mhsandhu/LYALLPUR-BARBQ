@@ -100,7 +100,7 @@ export default function LoadingScreen() {
       >
         {/* Ember particles bg */}
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          {Array.from({ length: 22 }).map((_, i) => (
+          {Array.from({ length: 10 }).map((_, i) => (
             <motion.div
               key={i}
               style={{

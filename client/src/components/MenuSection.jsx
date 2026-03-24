@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import publicApi from '../utils/api';
 import MenuItemModal from './MenuItemModal';
@@ -40,17 +40,22 @@ const cardVariants = {
 
 function MenuCard({ item, index, onClickItem }) {
   const imgSrc = item.image || '';
+  const rafPending = useRef(false);
   const handleMouseMove = (e) => {
+    if (rafPending.current) return;
+    rafPending.current = true;
     const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotY = ((x - cx) / cx) * 9;
-    const rotX = ((cy - y) / cy) * 9;
-    card.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03) translateY(-6px)`;
-    card.style.boxShadow = `${-rotY * 1.5}px ${rotX * 1.5}px 30px rgba(192,57,43,0.25), 0 20px 40px rgba(0,0,0,0.4)`;
+    const cx_ = e.clientX; const cy_ = e.clientY;
+    requestAnimationFrame(() => {
+      rafPending.current = false;
+      const rect = card.getBoundingClientRect();
+      const x = cx_ - rect.left; const y = cy_ - rect.top;
+      const cx = rect.width / 2; const cy = rect.height / 2;
+      const rotY = ((x - cx) / cx) * 9;
+      const rotX = ((cy - y) / cy) * 9;
+      card.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03) translateY(-6px)`;
+      card.style.boxShadow = `${-rotY * 1.5}px ${rotX * 1.5}px 30px rgba(192,57,43,0.25), 0 20px 40px rgba(0,0,0,0.4)`;
+    });
   };
 
   const handleMouseLeave = (e) => {
@@ -84,10 +89,6 @@ function MenuCard({ item, index, onClickItem }) {
     >
       {/* Image */}
       <div className="relative overflow-hidden" style={{ height: '210px', background: '#1A1A1A' }}>
-        <div className="steam-particle" />
-        <div className="steam-particle" />
-        <div className="steam-particle" />
-        <div className="steam-particle" />
         <img
           src={imgSrc}
           alt={item.name}
