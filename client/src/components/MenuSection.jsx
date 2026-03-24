@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import publicApi from '../utils/api';
 import MenuItemModal from './MenuItemModal';
@@ -40,29 +40,6 @@ const cardVariants = {
 
 function MenuCard({ item, index, onClickItem }) {
   const imgSrc = item.image || '';
-  const rafPending = useRef(false);
-  const handleMouseMove = (e) => {
-    if (rafPending.current) return;
-    rafPending.current = true;
-    const card = e.currentTarget;
-    const cx_ = e.clientX; const cy_ = e.clientY;
-    requestAnimationFrame(() => {
-      rafPending.current = false;
-      const rect = card.getBoundingClientRect();
-      const x = cx_ - rect.left; const y = cy_ - rect.top;
-      const cx = rect.width / 2; const cy = rect.height / 2;
-      const rotY = ((x - cx) / cx) * 9;
-      const rotX = ((cy - y) / cy) * 9;
-      card.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03) translateY(-6px)`;
-      card.style.boxShadow = `${-rotY * 1.5}px ${rotX * 1.5}px 30px rgba(192,57,43,0.25), 0 20px 40px rgba(0,0,0,0.4)`;
-    });
-  };
-
-  const handleMouseLeave = (e) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1) translateY(0)';
-    card.style.boxShadow = 'none';
-  };
 
   return (
     <motion.div
@@ -79,12 +56,10 @@ function MenuCard({ item, index, onClickItem }) {
         borderTop: '3px solid transparent',
         borderRadius: '10px',
         overflow: 'hidden',
-        transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-top-color 0.3s ease',
-        willChange: 'transform',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-top-color 0.3s ease',
       }}
-      onMouseMove={handleMouseMove}
       onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; }}
-      onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'transparent'; }}
+      onMouseLeave={e => { e.currentTarget.style.borderTopColor = 'transparent'; }}
       onClick={() => onClickItem(item)}
     >
       {/* Image */}

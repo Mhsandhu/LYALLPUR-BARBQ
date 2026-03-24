@@ -82,7 +82,7 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                 <FiX size={18} />
               </button>
             </div>
-            <p style={{ fontFamily: "'Lora', serif", fontSize: '0.9rem', color: '#888880', fontStyle: 'italic', marginBottom: '32px' }}>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '32px' }}>
               Pick up to {MAX_ITEMS} items — tap to place on your thaal
             </p>
 
@@ -104,9 +104,10 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                   background: 'radial-gradient(circle at 35% 35%, #2a2a2a 0%, #111 60%, #0a0a0a 100%)',
                   border: '1px solid rgba(255,255,255,0.05)',
                   boxShadow: 'inset 0 4px 20px rgba(0,0,0,0.6)',
+                  overflow: 'hidden',
                 }}>
                   {/* Inner rim */}
-                  <div style={{ position: 'absolute', inset: '10px', borderRadius: '50%', border: '1px solid rgba(212,172,13,0.15)' }} />
+                  <div style={{ position: 'absolute', inset: '10px', borderRadius: '50%', border: '1px solid rgba(212,172,13,0.15)', pointerEvents: 'none' }} />
 
                   {/* Empty state */}
                   <AnimatePresence>
@@ -130,9 +131,9 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                       return (
                         <motion.button
                           key={item._id || item.name}
-                          initial={{ scale: 0, opacity: 0 }}
+                          initial={{ scale: 0, opacity: 0, x: '-50%', y: '-50%' }}
                           animate={{ scale: 1, opacity: 1, x: '-50%', y: '-50%' }}
-                          exit={{ scale: 0, opacity: 0 }}
+                          exit={{ scale: 0, opacity: 0, x: '-50%', y: '-50%' }}
                           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                           onClick={() => toggleItem(item)}
                           title={`Remove ${item.name}`}

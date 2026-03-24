@@ -15,23 +15,23 @@
 
 /* ===== Light Theme (default) ===== */
 :root, [data-theme="light"] {
-  --bg-page: #FAFAF8;
-  --bg-section: #F2EDE6;
+  --bg-page: #FAF7F4;
+  --bg-section: #F0EAE1;
   --bg-card: #FFFFFF;
-  --bg-input: #F4EFE8;
-  --bg-elevated: #F8F4F0;
+  --bg-input: #EDE8E1;
+  --bg-elevated: #F5F0EB;
   --text-primary: #1A1208;
-  --text-secondary: #4A4030;
-  --text-muted: #7A7060;
-  --text-dimmed: #9A9080;
-  --border-subtle: rgba(0,0,0,0.07);
-  --border-card: rgba(0,0,0,0.1);
-  --border-input: rgba(0,0,0,0.18);
+  --text-secondary: #3A3020;
+  --text-muted: #6A6050;
+  --text-dimmed: #8A8070;
+  --border-subtle: rgba(0,0,0,0.09);
+  --border-card: rgba(0,0,0,0.13);
+  --border-input: rgba(0,0,0,0.22);
   --navbar-bg: rgba(255,255,255,0.97);
   --navbar-text: #1A1208;
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.07);
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.08);
-  --mobile-menu-bg: rgba(250,249,247,0.99);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.09);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.11);
+  --mobile-menu-bg: rgba(250,247,244,0.99);
 }
 
 /* ===== Dark Theme ===== */
@@ -177,10 +177,10 @@ body::before {
 }
 
 /* ===== Utility Classes ===== */
-.animate-flicker { animation: flicker 3s infinite; }
-.animate-ember-pulse { animation: ember-pulse 2s ease-in-out infinite; }
-.animate-float-up { animation: float-up 0.8s ease-out forwards; }
-.animate-spin-slow { animation: spin-slow 8s linear infinite; }
+.animate-flicker { animation: flicker 4s infinite; }
+.animate-ember-pulse { animation: ember-pulse 3s ease-in-out infinite; }
+.animate-float-up { animation: float-up 0.6s ease-out forwards; }
+.animate-spin-slow { animation: spin-slow 12s linear infinite; }
 .animate-marquee { animation: marquee 20s linear infinite; }
 
 /* Fire gradient text utility */
@@ -198,17 +198,17 @@ body::before {
 
 /* ===== Marquee Strip ===== */
 .marquee-left {
-  animation: marquee 25s linear infinite;
+  animation: marquee 35s linear infinite;
 }
 .marquee-right {
-  animation: marquee-reverse 30s linear infinite;
+  animation: marquee-reverse 40s linear infinite;
 }
 
 /* ===== Fire Divider ===== */
 .fire-divider-line {
   background: linear-gradient(90deg, var(--primary), var(--accent), var(--gold), var(--accent), var(--primary));
   background-size: 200% 100%;
-  animation: fire-divider-flow 3s linear infinite;
+  animation: fire-divider-flow 5s linear infinite;
 }
 
 /* ===== Deal Card Hover ===== */

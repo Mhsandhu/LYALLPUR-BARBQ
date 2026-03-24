@@ -89,16 +89,16 @@ export default function EmberCursor() {
       lastY.current = y;
       lastTime.current = now;
 
-      if (speed > 0.6) {
-        const count = Math.min(Math.ceil(speed * 1.5), 3);
+      if (speed > 1.2) {
+        const count = Math.min(Math.ceil(speed * 0.7), 2);
         for (let i = 0; i < count; i++) {
           setTimeout(
             () =>
               spawnEmber(
-                x + (Math.random() - 0.5) * 10,
-                y + (Math.random() - 0.5) * 10
+                x + (Math.random() - 0.5) * 8,
+                y + (Math.random() - 0.5) * 8
               ),
-            i * 40
+            i * 60
           );
         }
       }

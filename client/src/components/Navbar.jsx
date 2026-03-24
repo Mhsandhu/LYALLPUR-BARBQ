@@ -165,10 +165,23 @@ export default function Navbar() {
             )}
           </motion.button>
 
-          {/* Mobile: Cart + Hamburger */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile: Theme Toggle + Cart + Hamburger */}
+          <div className="lg:hidden flex items-center gap-1">
             <motion.button
               custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={navItemVariants}
+              onClick={toggleTheme}
+              className="relative z-10 p-2 cursor-pointer flex items-center justify-center"
+              style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--bg-elevated)', border: '1px solid var(--border-card)', color: isDark ? '#D4AC0D' : '#C0392B' }}
+              aria-label="Toggle theme"
+              title={isDark ? 'Switch to Light' : 'Switch to Dark'}
+            >
+              {isDark ? <FiSun size={15} /> : <FiMoon size={15} />}
+            </motion.button>
+            <motion.button
+              custom={2}
               initial="hidden"
               animate="visible"
               variants={navItemVariants}
@@ -186,7 +199,7 @@ export default function Navbar() {
               )}
             </motion.button>
             <motion.button
-              custom={2}
+              custom={3}
               initial="hidden"
               animate="visible"
               variants={navItemVariants}
@@ -281,6 +294,31 @@ export default function Navbar() {
                     {cartCount}
                   </span>
                 )}
+              </motion.button>
+
+              {/* Mobile Theme Toggle */}
+              <motion.button
+                custom={navLinks.length + 1}
+                variants={mobileLinkVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={toggleTheme}
+                className="flex items-center gap-3 cursor-pointer"
+                style={{
+                  background: 'var(--bg-elevated)',
+                  border: '1px solid var(--border-card)',
+                  borderRadius: '50px',
+                  padding: '12px 28px',
+                  color: 'var(--text-secondary)',
+                  fontFamily: "'Oswald', sans-serif",
+                  fontSize: '1rem',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {isDark ? <FiSun size={18} color="#D4AC0D" /> : <FiMoon size={18} color="#C0392B" />}
+                {isDark ? 'Light Mode' : 'Dark Mode'}
               </motion.button>
             </nav>
           </motion.div>
