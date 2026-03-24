@@ -1,10 +1,21 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
+import publicApi from '../utils/api';
 
 export default function FloatingWhatsApp() {
+  const [waNum, setWaNum] = useState('923706050759');
+
+  useEffect(() => {
+    publicApi.get('/settings').then(r => {
+      const num = (r.data?.whatsapp || '+923706050759').replace(/[^0-9]/g, '');
+      setWaNum(num);
+    }).catch(() => {});
+  }, []);
+
   const handleClick = () => {
     const msg = encodeURIComponent("Hi, I want to place an order at Lyallpur BarBQ");
-    window.open(`https://wa.me/923706050759?text=${msg}`, '_blank');
+    window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
   };
 
   return (

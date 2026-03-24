@@ -83,7 +83,7 @@ export default function Footer() {
               <h4 className="font-bold uppercase mb-5" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1rem', color: '#F5F5F0', letterSpacing: '0.1em' }}>
                 Connect With Us
               </h4>
-              <div className="flex gap-6 mb-8">
+              <div className="flex gap-4 mb-6">
                 {socials.map((s, i) => (
                   <a
                     key={i}
@@ -105,7 +105,7 @@ export default function Footer() {
                   </a>
                 ))}
               </div>
-              <div className="flex">
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <input
                   type="email"
                   placeholder="Your email address"
@@ -113,11 +113,12 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="order-input"
                   style={{
-                    flex: 1,
+                    flex: '1 1 160px',
+                    minWidth: 0,
                     background: '#1A1A1A',
                     border: '1px solid rgba(192,57,43,0.3)',
-                    borderRadius: '50px 0 0 50px',
-                    padding: '12px 16px',
+                    borderRadius: '50px',
+                    padding: '11px 16px',
                     color: 'white',
                     fontFamily: "'Lora', serif",
                     fontSize: '0.85rem',
@@ -133,9 +134,10 @@ export default function Footer() {
                     background: '#C0392B',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '0 50px 50px 0',
-                    padding: '12px 20px',
+                    borderRadius: '50px',
+                    padding: '11px 22px',
                     whiteSpace: 'nowrap',
+                    flexShrink: 0,
                   }}
                   onClick={() => {
                     if (email.trim()) setEmail('');

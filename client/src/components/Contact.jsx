@@ -153,7 +153,7 @@ export default function Contact() {
               href="https://www.google.com/maps/search/Faisalabad+Pakistan"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-full mt-5 cursor-pointer font-bold uppercase transition-all duration-300 contact-directions-btn"
+              className="flex items-center justify-center w-full cursor-pointer font-bold uppercase transition-all duration-300 contact-directions-btn"
               style={{
                 fontFamily: "'Oswald', sans-serif",
                 fontSize: '15px',
@@ -164,6 +164,7 @@ export default function Contact() {
                 borderRadius: '50px',
                 padding: '14px',
                 textDecoration: 'none',
+                marginTop: '20px',
               }}
             >
               Get Directions

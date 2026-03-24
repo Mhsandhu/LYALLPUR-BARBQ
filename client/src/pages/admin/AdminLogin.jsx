@@ -38,11 +38,12 @@ export default function AdminLogin() {
         style={{
           background: '#141414',
           border: '1px solid rgba(192,57,43,0.3)',
-          borderRadius: '16px',
-          padding: '48px',
+          borderRadius: '20px',
+          padding: 'clamp(28px, 7vw, 52px)',
           width: '100%',
           maxWidth: '420px',
-          margin: '0 20px',
+          margin: '0 clamp(16px, 4vw, 24px)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(192,57,43,0.1)',
         }}
       >
         <div className="text-center mb-8">
