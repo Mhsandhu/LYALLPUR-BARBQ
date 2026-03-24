@@ -71,8 +71,8 @@ export default function MenuItemModal({ item, isOpen, onClose }) {
               className="relative w-full overflow-hidden"
               style={{
                 maxWidth: '460px',
-                background: '#141414',
-                border: '2px solid rgba(192,57,43,0.4)',
+                background: 'var(--bg-card)',
+                border: '2px solid var(--border-card)',
                 borderRadius: '16px',
               }}
             >
@@ -97,14 +97,14 @@ export default function MenuItemModal({ item, isOpen, onClose }) {
                     onLoad={(e) => e.target.classList.add('loaded')}
                     onError={(e) => { e.target.parentElement.style.display = 'none'; }}
                   />
-                  <div className="absolute bottom-0 left-0 w-full" style={{ height: '60px', background: 'linear-gradient(to top, #141414, transparent)' }} />
+                  <div className="absolute bottom-0 left-0 w-full" style={{ height: '60px', background: 'linear-gradient(to top, var(--bg-card), transparent)' }} />
                 </div>
               )}
 
               {/* Content */}
               <div style={{ padding: hasImage ? '0 28px 0' : '28px 28px 0' }}>
                 {/* Name */}
-                <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: '#F5F5F0', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '6px' }}>
+                <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '6px' }}>
                   {item.name}
                 </h2>
 
@@ -122,7 +122,7 @@ export default function MenuItemModal({ item, isOpen, onClose }) {
                 </p>
 
                 {/* Divider */}
-                <div style={{ height: '1px', background: 'rgba(192,57,43,0.3)', marginBottom: '16px' }} />
+                <div style={{ height: '1px', background: 'var(--border-card)', marginBottom: '16px' }} />
 
                 {/* Quantity Selector */}
                 <div style={{ marginBottom: '8px' }}>
@@ -137,7 +137,7 @@ export default function MenuItemModal({ item, isOpen, onClose }) {
                     >
                       <FiMinus size={16} />
                     </button>
-                    <span className="flex items-center justify-center" style={{ width: '56px', height: '40px', fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#F5F5F0' }}>
+                    <span className="flex items-center justify-center" style={{ width: '56px', height: '40px', fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {quantity}
                     </span>
                     <button

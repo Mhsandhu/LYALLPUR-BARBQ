@@ -4,15 +4,55 @@
 
 /* ===== Design System Variables ===== */
 :root {
-  --bg: #080808;
   --primary: #C0392B;
   --accent: #E67E22;
   --gold: #D4AC0D;
-  --text: #F5F5F0;
   --font-cinzel: 'Cinzel Decorative', serif;
   --font-cormorant: 'Cormorant Garamond', serif;
   --font-oswald: 'Oswald', sans-serif;
   --font-lora: 'Lora', serif;
+}
+
+/* ===== Light Theme (default) ===== */
+:root, [data-theme="light"] {
+  --bg-page: #FAFAF8;
+  --bg-section: #F2EDE6;
+  --bg-card: #FFFFFF;
+  --bg-input: #F4EFE8;
+  --bg-elevated: #F8F4F0;
+  --text-primary: #1A1208;
+  --text-secondary: #4A4030;
+  --text-muted: #7A7060;
+  --text-dimmed: #9A9080;
+  --border-subtle: rgba(0,0,0,0.07);
+  --border-card: rgba(0,0,0,0.1);
+  --border-input: rgba(0,0,0,0.18);
+  --navbar-bg: rgba(255,255,255,0.97);
+  --navbar-text: #1A1208;
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.07);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.08);
+  --mobile-menu-bg: rgba(250,249,247,0.99);
+}
+
+/* ===== Dark Theme ===== */
+[data-theme="dark"] {
+  --bg-page: #080808;
+  --bg-section: #0A0A0A;
+  --bg-card: #141414;
+  --bg-input: #1A1A1A;
+  --bg-elevated: #1E1E1E;
+  --text-primary: #F5F5F0;
+  --text-secondary: #C8C8C0;
+  --text-muted: #888880;
+  --text-dimmed: #666660;
+  --border-subtle: rgba(192,57,43,0.15);
+  --border-card: rgba(192,57,43,0.2);
+  --border-input: rgba(192,57,43,0.3);
+  --navbar-bg: rgba(15,15,15,0.95);
+  --navbar-text: #F5F5F0;
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.4);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  --mobile-menu-bg: rgba(8,8,8,0.99);
 }
 
 /* ===== Base Reset & Body ===== */
@@ -28,12 +68,13 @@ html {
 
 body {
   font-family: var(--font-lora);
-  background-color: var(--bg);
-  color: var(--text);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Grain texture overlay */
@@ -61,7 +102,7 @@ body::before {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: var(--bg-card);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
@@ -74,7 +115,7 @@ body::before {
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--primary) #111;
+  scrollbar-color: var(--primary) var(--bg-card);
 }
 
 /* ===== CSS Animations ===== */
@@ -313,7 +354,7 @@ html, body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #1a1a1a 25%, #252525 37%, #1a1a1a 63%);
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-input) 37%, var(--bg-elevated) 63%);
   background-size: 800px 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: 8px;

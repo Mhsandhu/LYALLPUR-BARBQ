@@ -31,7 +31,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer style={{ background: '#050505', borderTop: '2px solid #C0392B' }} className="footer-top-border">
+      <footer style={{ background: '#0A0A0A', borderTop: '2px solid #C0392B' }} className="footer-top-border">
         <div style={{ padding: '70px clamp(24px, 5vw, 60px) 36px', maxWidth: '1100px', margin: '0 auto' }}>
           {/* Top 3 Columns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-14 md:gap-12 mb-12">
@@ -50,17 +50,17 @@ export default function Footer() {
               >
                 Lyallpur BarBQ
               </h3>
-              <p className="italic mb-3" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', color: '#D4AC0D' }}>
+              <p className="italic mb-3" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', color: '#A0A09A' }}>
                 Taste the Flame.
               </p>
-              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.85rem', color: '#888880', lineHeight: 1.7 }}>
+              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.85rem', color: '#A0A09A', lineHeight: 1.7 }}>
                 Authentic BBQ from the heart of Faisalabad
               </p>
             </div>
 
             {/* Column 2 — Quick Links */}
             <div>
-              <h4 className="font-bold uppercase mb-4" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1rem', color: '#F5F5F0', letterSpacing: '0.1em' }}>
+              <h4 className="font-bold uppercase mb-4" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1rem', color: '#A0A09A', letterSpacing: '0.1em' }}>
                 Quick Links
               </h4>
               <ul className="space-y-2">
@@ -80,7 +80,7 @@ export default function Footer() {
 
             {/* Column 3 — Connect */}
             <div>
-              <h4 className="font-bold uppercase mb-5" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1rem', color: '#F5F5F0', letterSpacing: '0.1em' }}>
+              <h4 className="font-bold uppercase mb-5" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1rem', color: '#A0A09A', letterSpacing: '0.1em' }}>
                 Connect With Us
               </h4>
               <div className="flex gap-4 mb-6">
@@ -115,7 +115,7 @@ export default function Footer() {
                   style={{
                     flex: '1 1 160px',
                     minWidth: 0,
-                    background: '#1A1A1A',
+                    background: 'rgba(255,255,255,0.07)',
                     border: '1px solid rgba(192,57,43,0.3)',
                     borderRadius: '50px',
                     padding: '11px 16px',
@@ -152,10 +152,10 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div style={{ borderTop: '1px solid rgba(192,57,43,0.2)', paddingTop: '24px' }}>
             <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: '#666660' }}>
+              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: '#A0A09A' }}>
                 &copy; 2025 Lyallpur BarBQ. All Rights Reserved.
               </p>
-              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: '#666660' }}>
+              <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: '#A0A09A' }}>
                 Crafted with fire in Faisalabad
               </p>
             </div>

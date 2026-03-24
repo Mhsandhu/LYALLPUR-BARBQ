@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiSun, FiMoon } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -40,6 +41,8 @@ const mobileLinkVariants = {
 
 export default function Navbar() {
   const { cartCount, openCart } = useCart();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -74,11 +77,13 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${
-          scrolled
-            ? 'bg-[#0F0F0F]/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.5)]'
-            : 'bg-transparent backdrop-blur-[2px]'
-        }`}
+        className="fixed top-0 left-0 w-full z-[1000] transition-all duration-500"
+        style={{
+          background: scrolled ? 'var(--navbar-bg)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'blur(2px)',
+          boxShadow: scrolled ? 'var(--shadow-sm)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--border-subtle)' : 'none',
+        }}
       >
         <div className="w-full flex items-center justify-between h-20" style={{ padding: '0 clamp(20px, 4vw, 48px)', maxWidth: '1280px', margin: '0 auto' }}>
           {/* Logo */}
@@ -110,14 +115,35 @@ export default function Navbar() {
                 initial="hidden"
                 animate="visible"
                 variants={navItemVariants}
-                className="nav-link relative text-[#F5F5F0] hover:text-white text-base font-bold tracking-[0.2em] uppercase transition-colors duration-300"
-                style={{ fontFamily: "'Oswald', sans-serif" }}
+                className="nav-link relative text-base font-bold tracking-[0.2em] uppercase transition-colors duration-300"
+                style={{ color: scrolled ? 'var(--navbar-text)' : '#F5F5F0', fontFamily: "'Oswald', sans-serif" }}
               >
                 {link.name}
                 <span className="nav-underline absolute left-0 -bottom-1 h-[3px] w-0 bg-[#C0392B] transition-all duration-300 ease-out" />
               </motion.a>
             ))}
           </div>
+
+          {/* Theme Toggle (Desktop) */}
+          <motion.button
+            onClick={toggleTheme}
+            custom={navLinks.length}
+            initial="hidden"
+            animate="visible"
+            variants={navItemVariants}
+            className="hidden lg:flex items-center justify-center cursor-pointer transition-all duration-300"
+            style={{
+              width: '38px', height: '38px', borderRadius: '50%',
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border-card)',
+              color: isDark ? '#D4AC0D' : '#C0392B',
+              boxShadow: 'var(--shadow-sm)',
+            }}
+            title={isDark ? 'Switch to Light' : 'Switch to Dark'}
+            aria-label="Toggle theme"
+          >
+            {isDark ? <FiSun size={16} /> : <FiMoon size={16} />}
+          </motion.button>
 
           {/* Cart Button (Desktop) */}
           <motion.button
@@ -147,10 +173,10 @@ export default function Navbar() {
               animate="visible"
               variants={navItemVariants}
               onClick={openCart}
-              className="relative z-10 text-[#F5F5F0] p-2 cursor-pointer"
+              className="relative z-10 p-2 cursor-pointer"
+              style={{ color: 'var(--navbar-text)', background: 'none', border: 'none' }}
               aria-label="Open cart"
               title="Open cart"
-              style={{ background: 'none', border: 'none' }}
             >
               <FiShoppingCart size={22} />
               {cartCount > 0 && (
@@ -165,10 +191,10 @@ export default function Navbar() {
               animate="visible"
               variants={navItemVariants}
               onClick={() => setMobileOpen(true)}
-              className="relative z-10 text-[#F5F5F0] p-2 cursor-pointer"
+              className="relative z-10 p-2 cursor-pointer"
+              style={{ color: 'var(--navbar-text)', background: 'none', border: 'none' }}
               aria-label="Open menu"
               title="Open menu"
-              style={{ background: 'none', border: 'none' }}
             >
               <HiMenuAlt3 size={28} />
             </motion.button>
@@ -185,7 +211,8 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 z-[2000] bg-[#080808]/98 backdrop-blur-xl flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[2000] backdrop-blur-xl flex flex-col items-center justify-center"
+            style={{ background: isDark ? 'rgba(8,8,8,0.98)' : 'rgba(250,249,247,0.98)' }}
           >
             {/* Close Button */}
             <motion.button
@@ -193,7 +220,8 @@ export default function Navbar() {
               animate={{ opacity: 1, rotate: 0 }}
               transition={{ delay: 0.1, duration: 0.3 }}
               onClick={() => setMobileOpen(false)}
-              className="absolute top-6 right-6 text-[#F5F5F0] p-2"
+              className="absolute top-6 right-6 p-2"
+              style={{ color: 'var(--text-primary)' }}
               aria-label="Close menu"
             >
               <HiX size={32} />
@@ -228,8 +256,8 @@ export default function Navbar() {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="text-2xl tracking-[0.2em] uppercase text-[#F5F5F0]/80 hover:text-[#E67E22] transition-colors duration-300"
-                  style={{ fontFamily: "'Oswald', sans-serif" }}
+                  className="text-2xl tracking-[0.2em] uppercase transition-colors duration-300"
+                  style={{ color: 'var(--text-secondary)', fontFamily: "'Oswald', sans-serif" }}
                 >
                   {link.name}
                 </motion.a>

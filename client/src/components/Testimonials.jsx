@@ -59,8 +59,8 @@ function ReviewCard({ review }) {
       className="flex-shrink-0"
       style={{
         width: '360px',
-        background: '#141414',
-        border: '1px solid rgba(192,57,43,0.2)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-card)',
         borderRadius: '12px',
         padding: '32px',
       }}
@@ -85,7 +85,7 @@ function ReviewCard({ review }) {
           style={{
             fontFamily: "'Lora', serif",
             fontSize: '0.95rem',
-            color: '#C8C8C0',
+            color: 'var(--text-secondary)',
             lineHeight: 1.7,
             fontStyle: 'italic',
             paddingTop: '16px',
@@ -95,10 +95,10 @@ function ReviewCard({ review }) {
           {review.review}
         </p>
       </div>
-      <div style={{ marginTop: '20px', borderTop: '1px solid rgba(192,57,43,0.15)', paddingTop: '16px' }}>
+      <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-subtle)', paddingTop: '16px' }}>
         <p
           className="font-bold uppercase"
-          style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.95rem', color: '#F5F5F0', letterSpacing: '0.05em' }}
+          style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.95rem', color: 'var(--text-primary)', letterSpacing: '0.05em' }}
         >
           {review.name}
         </p>
@@ -143,7 +143,7 @@ export default function Testimonials() {
   }, [paused, singleSetWidth]);
 
   return (
-    <section style={{ background: '#0A0A0A' }}>
+    <section style={{ background: 'var(--bg-section)' }}>
       <div style={{ padding: '100px clamp(24px, 5vw, 60px)', maxWidth: '1200px', margin: '0 auto' }}>
         <motion.div
           variants={fadeIn}
@@ -155,7 +155,7 @@ export default function Testimonials() {
           <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '12px', color: '#D4AC0D', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '12px' }}>
             Happy Customers
           </p>
-          <h2 className="text-white mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700 }}>
+          <h2 className="mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700, color: 'var(--text-primary)' }}>
             What Our Guests Say
           </h2>
           <p className="italic" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', color: '#D4AC0D' }}>

@@ -74,9 +74,9 @@ function MenuCard({ item, index, onClickItem }) {
       viewport={{ once: true, margin: '60px' }}
       className="menu-item-card cursor-pointer"
       style={{
-        background: '#141414',
-        border: '1px solid rgba(192,57,43,0.2)',
-        borderTop: '3px solid rgba(192,57,43,0)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-card)',
+        borderTop: '3px solid transparent',
         borderRadius: '10px',
         overflow: 'hidden',
         transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-top-color 0.3s ease',
@@ -84,11 +84,11 @@ function MenuCard({ item, index, onClickItem }) {
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={e => { e.currentTarget.style.borderTopColor = '#C0392B'; }}
-      onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'rgba(192,57,43,0)'; }}
+      onMouseLeave={(e) => { handleMouseLeave(e); e.currentTarget.style.borderTopColor = 'transparent'; }}
       onClick={() => onClickItem(item)}
     >
       {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: '210px', background: '#1A1A1A' }}>
+      <div className="relative overflow-hidden" style={{ height: '210px', background: 'var(--bg-input)' }}>
         <img
           src={imgSrc}
           alt={item.name}
@@ -104,7 +104,7 @@ function MenuCard({ item, index, onClickItem }) {
           onLoad={(e) => e.target.classList.add('loaded')}
           onError={(e) => {
             e.target.style.display = 'none';
-            e.target.parentElement.style.background = '#1A1A1A';
+            e.target.parentElement.style.background = 'var(--bg-input)';
             e.target.parentElement.innerHTML = '<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem">🔥</span>';
           }}
         />
@@ -121,11 +121,12 @@ function MenuCard({ item, index, onClickItem }) {
       {/* Card Body */}
       <div className="text-center" style={{ padding: '18px 16px 20px' }}>
         <h4
-          className="text-white font-bold uppercase"
+          className="font-bold uppercase"
           style={{
             fontFamily: "'Oswald', sans-serif",
             fontSize: '0.95rem',
             letterSpacing: '0.05em',
+            color: 'var(--text-primary)',
           }}
         >
           {item.name}
@@ -148,7 +149,7 @@ function MenuCard({ item, index, onClickItem }) {
             letterSpacing: '0.1em',
             background: 'transparent',
             border: '2px solid #C0392B',
-            color: '#F5F5F0',
+            color: '#C0392B',
             borderRadius: '50px',
             padding: '10px 8px',
             transition: 'all 0.3s ease',
@@ -198,7 +199,7 @@ export default function MenuSection() {
       : menuItems.filter((item) => item.category === activeTab);
 
   return (
-    <section id="menu" style={{ background: '#0A0A0A' }}>
+    <section id="menu" style={{ background: 'var(--bg-section)' }}>
       <div className="max-w-7xl mx-auto" style={{ padding: '100px clamp(24px, 5vw, 60px)' }}>
         {/* Section Header */}
         <div className="text-center" style={{ marginBottom: '32px' }}>
@@ -214,11 +215,12 @@ export default function MenuSection() {
             À La Carte
           </p>
           <h2
-            className="text-white mb-4"
+            className="mb-4"
             style={{
               fontFamily: "'Cinzel Decorative', serif",
               fontSize: 'clamp(1.8rem, 4vw, 3rem)',
               fontWeight: 700,
+              color: 'var(--text-primary)',
             }}
           >
             Individual Items
@@ -289,7 +291,7 @@ export default function MenuSection() {
         {loading && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style={{ gap: '24px' }}>
             {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-              <div key={i} style={{ background: '#141414', border: '1px solid rgba(192,57,43,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+              <div key={i} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', overflow: 'hidden' }}>
                 <div className="skeleton" style={{ height: '160px', borderRadius: 0 }} />
                 <div className="text-center" style={{ padding: '18px 16px 20px' }}>
                   <div className="skeleton mx-auto" style={{ height: '16px', width: '70%', marginBottom: '10px' }} />

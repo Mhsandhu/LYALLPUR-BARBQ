@@ -74,11 +74,11 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                 <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '11px', letterSpacing: '0.4em', color: '#D4AC0D', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Interactive Experience
                 </p>
-                <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.4rem, 4vw, 2.2rem)', color: '#F5F5F0', margin: 0 }}>
+                <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.4rem, 4vw, 2.2rem)', color: 'var(--text-primary)', margin: 0 }}>
                   Build Your Thaal
                 </h2>
               </div>
-              <button onClick={onClose} style={{ background: 'none', border: '1px solid rgba(192,57,43,0.3)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F5F5F0', cursor: 'pointer' }}>
+              <button onClick={onClose} style={{ background: 'none', border: '1px solid var(--border-card)', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', cursor: 'pointer' }}>
                 <FiX size={18} />
               </button>
             </div>
@@ -194,8 +194,8 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                       whileTap={{ scale: 0.93 }}
                       onClick={() => !isFull && toggleItem(item)}
                       style={{
-                        background: isSelected ? 'rgba(192,57,43,0.15)' : '#141414',
-                        border: `1.5px solid ${isSelected ? '#C0392B' : 'rgba(192,57,43,0.18)'}`,
+                        background: isSelected ? 'rgba(192,57,43,0.15)' : 'var(--bg-card)',
+                        border: `1.5px solid ${isSelected ? '#C0392B' : 'var(--border-subtle)'}`,
                         borderRadius: '10px', overflow: 'hidden',
                         cursor: isFull ? 'not-allowed' : 'pointer',
                         opacity: isFull ? 0.4 : 1,
@@ -204,7 +204,7 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                         position: 'relative',
                       }}
                     >
-                      <div style={{ height: 'clamp(60px, 12vw, 90px)', overflow: 'hidden', background: '#1a1a1a' }}>
+                      <div style={{ height: 'clamp(60px, 12vw, 90px)', overflow: 'hidden', background: 'var(--bg-input)' }}>
                         {item.image ? (
                           <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         ) : (
@@ -212,7 +212,7 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                         )}
                       </div>
                       <div style={{ padding: '8px 6px 10px' }}>
-                        <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: 'clamp(10px, 2.5vw, 12px)', letterSpacing: '0.04em', color: '#F5F5F0', textTransform: 'uppercase', margin: 0, lineHeight: 1.2 }}>
+                        <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: 'clamp(10px, 2.5vw, 12px)', letterSpacing: '0.04em', color: 'var(--text-primary)', textTransform: 'uppercase', margin: 0, lineHeight: 1.2 }}>
                           {item.name}
                         </p>
                         {item.price > 0 && (
@@ -248,8 +248,8 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                 transition={{ type: 'spring', stiffness: 260, damping: 22 }}
                 style={{
                   position: 'fixed', bottom: 0, left: 0, right: 0,
-                  background: '#0f0f0f',
-                  borderTop: '1px solid rgba(192,57,43,0.3)',
+                  background: 'var(--bg-elevated)',
+                  borderTop: '1px solid var(--border-card)',
                   padding: 'clamp(10px, 3vw, 20px) clamp(14px, 4vw, 40px)',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   flexWrap: 'wrap', gap: '10px', zIndex: 50001,
@@ -269,7 +269,7 @@ export default function ThaalBuilder({ menuItems = [], isOpen, onClose }) {
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <button
                     onClick={() => setSelected([])}
-                    style={{ background: 'none', border: '1px solid rgba(192,57,43,0.4)', borderRadius: '50px', padding: '10px 18px', color: '#F5F5F0', fontFamily: "'Oswald', sans-serif", fontSize: '13px', letterSpacing: '0.08em', cursor: 'pointer' }}
+                    style={{ background: 'none', border: '1px solid var(--border-card)', borderRadius: '50px', padding: '10px 18px', color: 'var(--text-primary)', fontFamily: "'Oswald', sans-serif", fontSize: '13px', letterSpacing: '0.08em', cursor: 'pointer' }}
                   >
                     Clear
                   </button>

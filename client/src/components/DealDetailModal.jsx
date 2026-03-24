@@ -77,8 +77,8 @@ export default function DealDetailModal({ deal, isOpen, onClose }) {
               style={{
                 maxWidth: '560px',
                 maxHeight: '90vh',
-                background: '#141414',
-                border: '2px solid rgba(192,57,43,0.4)',
+                background: 'var(--bg-card)',
+                border: '2px solid var(--border-card)',
                 borderRadius: '16px',
                 overflowY: 'auto',
               }}
@@ -103,7 +103,7 @@ export default function DealDetailModal({ deal, isOpen, onClose }) {
                   onLoad={(e) => e.target.classList.add('loaded')}
                   onError={(e) => { e.target.src = defaultImage; }}
                 />
-                <div className="absolute bottom-0 left-0 w-full" style={{ height: '80px', background: 'linear-gradient(to top, #141414, transparent)' }} />
+                <div className="absolute bottom-0 left-0 w-full" style={{ height: '80px', background: 'linear-gradient(to top, var(--bg-card), transparent)' }} />
               </div>
 
               {/* Content */}
@@ -127,7 +127,7 @@ export default function DealDetailModal({ deal, isOpen, onClose }) {
                 </div>
 
                 {/* Name */}
-                <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.6rem', fontWeight: 700, color: '#F5F5F0', marginBottom: '6px' }}>
+                <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.6rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
                   {dealName}
                 </h2>
 
@@ -138,14 +138,14 @@ export default function DealDetailModal({ deal, isOpen, onClose }) {
                 </p>
 
                 {/* Divider */}
-                <div style={{ height: '1px', background: 'rgba(192,57,43,0.3)', marginBottom: '14px' }} />
+                <div style={{ height: '1px', background: 'var(--border-card)', marginBottom: '14px' }} />
 
                 {/* Items List */}
                 <div style={{ maxHeight: '180px', overflowY: 'auto', marginBottom: '16px' }}>
                   {dealItems.map((item, i) => (
                     <div key={i} className="flex items-center gap-3" style={{ padding: '4px 0' }}>
                       <span className="shrink-0 inline-block w-[6px] h-[6px] rounded-full bg-[#C0392B]" />
-                      <span style={{ fontFamily: "'Lora', serif", fontSize: '0.9rem', color: '#C8C8C0', lineHeight: 1.5 }}>{item}</span>
+                      <span style={{ fontFamily: "'Lora', serif", fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -163,7 +163,7 @@ export default function DealDetailModal({ deal, isOpen, onClose }) {
                     >
                       <FiMinus size={16} />
                     </button>
-                    <span className="flex items-center justify-center" style={{ width: '56px', height: '40px', fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#F5F5F0' }}>
+                    <span className="flex items-center justify-center" style={{ width: '56px', height: '40px', fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                       {quantity}
                     </span>
                     <button

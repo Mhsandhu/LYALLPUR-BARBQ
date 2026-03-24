@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import publicApi from './utils/api';
 import Home from './pages/Home';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
@@ -11,21 +13,37 @@ import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminSettings from './pages/admin/AdminSettings';
 import { Toaster } from 'react-hot-toast';
 import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
 import CartDrawer from './components/CartDrawer';
 import EmberCursor from './components/EmberCursor';
 import TouchFireBurst from './components/TouchFireBurst';
 import LoadingScreen from './components/LoadingScreen';
 import AmbientSound from './components/AmbientSound';
 
-function App() {
+function SiteOnly() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/dashboard-lbq-a8f2c9d1');
+  if (isAdmin) return null;
   return (
-    <CartProvider>
-    <BrowserRouter>
+    <>
       <LoadingScreen />
       <AmbientSound />
       <EmberCursor />
       <TouchFireBurst />
       <CartDrawer />
+    </>
+  );
+}
+
+function AppInner() {
+  useEffect(() => {
+    // Wake up Railway backend on first load to reduce cold start delay
+    publicApi.get('/health').catch(() => {});
+  }, []);
+
+  return (
+    <>
+      <SiteOnly />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard-lbq-a8f2c9d1/login" element={<AdminLogin />} />
@@ -44,18 +62,29 @@ function App() {
         position="top-right"
         toastOptions={{
           style: {
-            background: '#1A1A1A',
-            color: '#F5F5F0',
-            border: '1px solid rgba(192,57,43,0.3)',
+            background: 'var(--bg-card)',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border-card)',
             fontFamily: "'Lora', serif",
           },
           success: { iconTheme: { primary: '#E67E22', secondary: '#fff' } },
           error: { iconTheme: { primary: '#C0392B', secondary: '#fff' } },
         }}
       />
-    </BrowserRouter>
-    </CartProvider>
+    </>
   );
 }
 
-export default App
+function App() {
+  return (
+    <ThemeProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <AppInner />
+        </BrowserRouter>
+      </CartProvider>
+    </ThemeProvider>
+  );
+}
+
+export default App;

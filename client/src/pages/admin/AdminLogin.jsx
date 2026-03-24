@@ -113,13 +113,14 @@ export default function AdminLogin() {
           className="w-full cursor-pointer font-bold uppercase flex items-center justify-center gap-2 transition-all duration-300"
           style={{
             fontFamily: "'Oswald', sans-serif",
-            fontSize: '16px',
+            fontSize: '15px',
             letterSpacing: '0.15em',
             background: '#E67E22',
             color: 'white',
             border: 'none',
             borderRadius: '50px',
-            padding: '16px',
+            padding: '13px 16px',
+            marginTop: '20px',
             opacity: loading ? 0.7 : 1,
           }}
         >

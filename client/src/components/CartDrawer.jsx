@@ -7,11 +7,11 @@ import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 
 const inputStyle = {
-  background: '#1A1A1A',
-  border: '1px solid rgba(192,57,43,0.3)',
+  background: 'var(--bg-input)',
+  border: '1px solid var(--border-input)',
   borderRadius: '8px',
   padding: '12px 14px',
-  color: 'white',
+  color: 'var(--text-primary)',
   fontFamily: "'Lora', serif",
   fontSize: '0.9rem',
   width: '100%',
@@ -214,14 +214,14 @@ _Order placed via Lyallpur BarBQ website_`;
             className="fixed top-0 right-0 h-full z-[1200] flex flex-col"
             style={{
               width: 'min(420px, 100vw)',
-              background: '#0F0F0F',
-              borderLeft: '1px solid rgba(192,57,43,0.3)',
+              background: 'var(--bg-card)',
+              borderLeft: '1px solid var(--border-input)',
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between shrink-0" style={{ padding: '16px 20px', borderBottom: '1px solid rgba(192,57,43,0.2)' }}>
+            <div className="flex items-center justify-between shrink-0" style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-card)' }}>
               <div className="flex items-center gap-3">
-                <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: '#F5F5F0', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                <h2 style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                   Your Cart
                 </h2>
                 {cartCount > 0 && (
@@ -233,7 +233,7 @@ _Order placed via Lyallpur BarBQ website_`;
               <button
                 onClick={closeCart}
                 className="cursor-pointer flex items-center justify-center"
-                style={{ background: 'none', border: 'none', color: '#F5F5F0', width: '36px', height: '36px' }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-primary)', width: '36px', height: '36px' }}
                 title="Close cart"
               >
                 <FiX size={22} />
@@ -255,13 +255,13 @@ _Order placed via Lyallpur BarBQ website_`;
                   >
                     <FiCheck size={36} color="white" />
                   </motion.div>
-                  <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.5rem', fontWeight: 700, color: '#F5F5F0', marginBottom: '8px' }}>
+                  <h2 style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
                     Order Placed!
                   </h2>
                   <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '1.3rem', color: '#C0392B', letterSpacing: '0.1em', marginBottom: '12px' }}>
                     {successOrder.orderNumber}
                   </p>
-                  <p style={{ fontFamily: "'Lora', serif", fontSize: '0.95rem', color: '#C8C8C0', lineHeight: 1.7, marginBottom: '8px' }}>
+                  <p style={{ fontFamily: "'Lora', serif", fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '8px' }}>
                     We'll call you on <strong style={{ color: '#E67E22' }}>+92{successOrder.phone}</strong> to confirm
                   </p>
                   <p style={{ fontFamily: "'Lora', serif", fontSize: '0.85rem', color: '#888', fontStyle: 'italic', marginBottom: '32px' }}>
@@ -291,7 +291,7 @@ _Order placed via Lyallpur BarBQ website_`;
                     {cart.length === 0 ? (
                       <div className="flex flex-col items-center justify-center text-center" style={{ padding: '48px 20px' }}>
                         <FiShoppingBag size={48} color="#333" style={{ marginBottom: '16px' }} />
-                        <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: '#666660', fontStyle: 'italic', marginBottom: '4px' }}>
+                        <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '4px' }}>
                           Your cart is empty
                         </p>
                         <p style={{ fontFamily: "'Lora', serif", fontSize: '0.85rem', color: '#555', marginBottom: '20px' }}>
@@ -320,18 +320,18 @@ _Order placed via Lyallpur BarBQ website_`;
                           <div
                             key={item.id}
                             className="relative"
-                            style={{ background: '#141414', borderRadius: '10px', padding: '12px', border: '1px solid rgba(192,57,43,0.15)' }}
+                            style={{ background: 'var(--bg-elevated)', borderRadius: '10px', padding: '12px', border: '1px solid var(--border-subtle)' }}
                           >
                             <div className="flex gap-3">
                               {/* Thumbnail */}
                               {item.image && (
-                                <div className="shrink-0" style={{ width: '60px', height: '60px', borderRadius: '8px', overflow: 'hidden', background: '#1A1A1A' }}>
+                                <div className="shrink-0" style={{ width: '60px', height: '60px', borderRadius: '8px', overflow: 'hidden', background: 'var(--bg-input)' }}>
                                   <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.parentElement.style.display = 'none'; }} />
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-start justify-between">
-                                  <p className="font-bold uppercase truncate" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.85rem', color: '#F5F5F0', letterSpacing: '0.05em' }}>
+                                  <p className="font-bold uppercase truncate" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.85rem', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>
                                     {item.type === 'deal' ? `Deal — ${item.name}` : item.name}
                                   </p>
                                   <button onClick={() => removeFromCart(item.id)} className="cursor-pointer shrink-0 ml-2" style={{ background: 'none', border: 'none', color: '#C0392B', padding: '2px' }} title="Remove">
@@ -343,13 +343,13 @@ _Order placed via Lyallpur BarBQ website_`;
                                 </p>
                                 <div className="flex items-center justify-between mt-2">
                                   <div className="flex items-center gap-0">
-                                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="cursor-pointer flex items-center justify-center" style={{ width: '28px', height: '28px', borderRadius: '6px 0 0 6px', background: '#0F0F0F', border: '1px solid rgba(192,57,43,0.3)', color: '#F5F5F0' }}>
+                                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="cursor-pointer flex items-center justify-center" style={{ width: '28px', height: '28px', borderRadius: '6px 0 0 6px', background: 'var(--bg-page)', border: '1px solid var(--border-input)', color: 'var(--text-primary)' }}>
                                       <FiMinus size={12} />
                                     </button>
-                                    <span className="flex items-center justify-center" style={{ width: '34px', height: '28px', background: '#0F0F0F', borderTop: '1px solid rgba(192,57,43,0.3)', borderBottom: '1px solid rgba(192,57,43,0.3)', fontFamily: "'Oswald', sans-serif", fontSize: '0.85rem', color: '#F5F5F0' }}>
+                                    <span className="flex items-center justify-center" style={{ width: '34px', height: '28px', background: 'var(--bg-page)', borderTop: '1px solid var(--border-input)', borderBottom: '1px solid var(--border-input)', fontFamily: "'Oswald', sans-serif", fontSize: '0.85rem', color: 'var(--text-primary)' }}>
                                       {item.quantity}
                                     </span>
-                                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="cursor-pointer flex items-center justify-center" style={{ width: '28px', height: '28px', borderRadius: '0 6px 6px 0', background: '#0F0F0F', border: '1px solid rgba(192,57,43,0.3)', color: '#F5F5F0' }}>
+                                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="cursor-pointer flex items-center justify-center" style={{ width: '28px', height: '28px', borderRadius: '0 6px 6px 0', background: 'var(--bg-page)', border: '1px solid var(--border-input)', color: 'var(--text-primary)' }}>
                                       <FiPlus size={12} />
                                     </button>
                                   </div>
@@ -482,17 +482,17 @@ _Order placed via Lyallpur BarBQ website_`;
                       <div style={{ padding: '0 20px 20px' }}>
                         {/* Summary */}
                         <div className="space-y-1 mb-4" style={{ fontFamily: "'Oswald', sans-serif" }}>
-                          <div className="flex justify-between" style={{ fontSize: '0.85rem', color: '#C8C8C0' }}>
+                          <div className="flex justify-between" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                             <span>Subtotal</span>
                             <span>Rs. {cartTotal.toLocaleString()}</span>
                           </div>
-                          <div className="flex justify-between" style={{ fontSize: '0.85rem', color: '#C8C8C0' }}>
+                          <div className="flex justify-between" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                             <span>Delivery</span>
                             <span>{deliveryCharge > 0 ? `Rs. ${deliveryCharge}` : 'Free'}</span>
                           </div>
-                          <div style={{ height: '1px', background: 'rgba(192,57,43,0.3)', margin: '6px 0' }} />
+                          <div style={{ height: '1px', background: 'var(--border-card)', margin: '6px 0' }} />
                           <div className="flex justify-between" style={{ fontSize: '1.2rem', fontWeight: 700 }}>
-                            <span className="text-white">Total</span>
+                            <span style={{ color: 'var(--text-primary)' }}>Total</span>
                             <span style={{ color: '#D4AC0D' }}>Rs. {grandTotal.toLocaleString()}</span>
                           </div>
                         </div>

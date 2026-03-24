@@ -47,7 +47,7 @@ function GalleryImage({ item, index, onClick }) {
         className="gallery-img"
         onError={(e) => {
           e.target.style.display = 'none';
-          e.target.parentElement.style.background = '#1A1A1A';
+          e.target.parentElement.style.background = 'var(--bg-input)';
         }}
       />
       <div
@@ -160,7 +160,7 @@ export default function Gallery() {
   const nextImage = () => setLightboxIndex((prev) => (prev + 1) % galleryItems.length);
 
   return (
-    <section id="gallery" style={{ background: '#080808' }}>
+    <section id="gallery" style={{ background: 'var(--bg-page)' }}>
       <div style={{ padding: '100px clamp(24px, 5vw, 60px)', maxWidth: '1100px', margin: '0 auto' }}>
         <motion.div
           variants={fadeIn}
@@ -172,7 +172,7 @@ export default function Gallery() {
           <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '12px', color: '#D4AC0D', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '12px' }}>
             Our Kitchen
           </p>
-          <h2 className="text-white mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700 }}>
+          <h2 className="mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700, color: 'var(--text-primary)' }}>
             Our Kitchen, Our Pride
           </h2>
           <p className="italic" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.1rem', color: '#D4AC0D' }}>

@@ -78,7 +78,7 @@ function StatCard({ stat, index }) {
         style={{
           fontFamily: "'Lora', serif",
           fontSize: '0.95rem',
-          color: '#C8C8C0',
+          color: 'var(--text-secondary)'
         }}
       >
         {stat.label}
@@ -93,8 +93,8 @@ export default function StatsBanner() {
       className="w-full"
       style={{
         background: 'linear-gradient(135deg, #1A0505, #0F0F0F, #1A0505)',
-        borderTop: '1px solid rgba(192,57,43,0.3)',
-        borderBottom: '1px solid rgba(192,57,43,0.3)',
+        borderTop: '1px solid var(--primary)',
+        borderBottom: '1px solid var(--primary)',
         padding: '80px clamp(24px, 5vw, 60px)',
       }}
     >

@@ -35,7 +35,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" style={{ background: '#080808' }}>
+    <section id="contact" style={{ background: 'var(--bg-page)' }}>
       <div style={{ padding: '100px clamp(24px, 5vw, 60px)', maxWidth: '1100px', margin: '0 auto' }}>
         <motion.div
           variants={fadeIn}
@@ -47,7 +47,7 @@ export default function Contact() {
           <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '12px', color: '#D4AC0D', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '12px' }}>
             Get in Touch
           </p>
-          <h2 className="text-white mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700 }}>
+          <h2 className="mb-4" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 700, color: 'var(--text-primary)' }}>
             Visit Us
           </h2>
         </motion.div>
@@ -70,13 +70,13 @@ export default function Contact() {
                       width: '44px',
                       height: '44px',
                       borderRadius: '50%',
-                      border: '1px solid rgba(192,57,43,0.3)',
+                      border: '1px solid var(--border-card)',
                       color: '#C0392B',
                     }}
                   >
                     {item.icon}
                   </div>
-                  <span style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: '#C8C8C0' }}>
+                  <span style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: 'var(--text-secondary)' }}>
                     {item.text}
                   </span>
                 </div>

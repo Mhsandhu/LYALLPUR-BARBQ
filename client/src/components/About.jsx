@@ -33,7 +33,7 @@ function OwnerCard({ name, photo }) {
           height: '130px',
           borderRadius: '50%',
           border: '3px solid rgba(192,57,43,0.4)',
-          background: '#141414',
+          background: 'var(--bg-card)',
           marginBottom: '16px',
         }}
       >
@@ -53,7 +53,7 @@ function OwnerCard({ name, photo }) {
         style={{
           fontFamily: "'Oswald', sans-serif",
           fontSize: '1rem',
-          color: '#F5F5F0',
+          color: 'var(--text-primary)',
           letterSpacing: '0.08em',
           marginBottom: '4px',
         }}
@@ -80,7 +80,7 @@ export default function About() {
   const owner2Photo = settings?.owner2Photo || '';
 
   return (
-    <section id="about" style={{ background: '#0A0A0A' }}>
+    <section id="about" style={{ background: 'var(--bg-section)' }}>
       <div style={{ padding: '100px clamp(24px, 5vw, 60px)', maxWidth: '1100px', margin: '0 auto' }}>
         <div className="flex flex-col lg:flex-row gap-14 lg:gap-20">
           {/* Left Column — 45% */}
@@ -97,7 +97,7 @@ export default function About() {
               style={{
                 borderRadius: '12px',
                 height: 'clamp(320px, 45vw, 520px)',
-                background: '#111',
+                background: 'var(--bg-card)',
               }}
             >
               <img
@@ -142,7 +142,7 @@ export default function About() {
                     fontFamily: "'Cormorant Garamond', serif",
                     fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
                     fontStyle: 'italic',
-                    color: '#F5F5F0',
+                    color: 'var(--text-primary)',
                     lineHeight: 1.5,
                     marginBottom: '10px',
                   }}
@@ -163,15 +163,15 @@ export default function About() {
             className="w-full lg:w-[55%]"
           >
             <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '12px', color: '#D4AC0D', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '12px' }}>
-              Our Story
+            Our Story
             </p>
-            <h2 className="text-white mb-6" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 700 }}>
+            <h2 className="mb-6" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)' }}>
               The Legacy of Lyallpur
             </h2>
-            <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: '#C8C8C0', lineHeight: 1.8, marginBottom: '20px' }}>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: '20px' }}>
               Born in the heart of Faisalabad — the city once called Lyallpur — our BBQ is cooked over open flame, marinated with secret spice blends passed down through generations. Every Thaal tells a story of authentic Punjabi flavors.
             </p>
-            <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: '#C8C8C0', lineHeight: 1.8, marginBottom: '32px' }}>
+            <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: '32px' }}>
               From our signature Malai Special to the classic Protein Thaal, every dish is prepared fresh daily with the finest ingredients. We believe great BBQ is not just food — it's an experience.
             </p>
 
@@ -181,17 +181,17 @@ export default function About() {
                 <div
                   key={i}
                   style={{
-                    background: '#141414',
-                    border: '1px solid rgba(192,57,43,0.2)',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-card)',
                     borderRadius: '8px',
                     padding: '24px 20px',
                   }}
                 >
-                  <div style={{ color: '#C0392B', marginBottom: '10px' }}>{f.icon}</div>
-                  <p className="font-bold uppercase" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.9rem', color: '#F5F5F0', letterSpacing: '0.05em', marginBottom: '6px' }}>
+                  <div style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>{f.icon}</div>
+                  <p className="font-bold uppercase" style={{ fontFamily: "'Oswald', sans-serif", fontSize: '0.9rem', color: 'var(--text-primary)', letterSpacing: '0.05em', marginBottom: '6px' }}>
                     {f.title}
                   </p>
-                  <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: '#888880' }}>
+                  <p style={{ fontFamily: "'Lora', serif", fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                     {f.text}
                   </p>
                 </div>
@@ -212,10 +212,10 @@ export default function About() {
           <p style={{ fontFamily: "'Oswald', sans-serif", fontSize: '12px', color: '#D4AC0D', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '12px' }}>
             The Visionaries
           </p>
-          <h2 className="text-white mb-6" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 700 }}>
+          <h2 className="mb-6" style={{ fontFamily: "'Cinzel Decorative', serif", fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 700, color: 'var(--text-primary)' }}>
             Mission of Founders
           </h2>
-          <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: '#C8C8C0', lineHeight: 1.8, maxWidth: '700px', margin: '0 auto 48px' }}>
+          <p style={{ fontFamily: "'Lora', serif", fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.8, maxWidth: '700px', margin: '0 auto 48px' }}>
             Driven by a passion for authentic flavors, our founders set out to bring the true taste of Punjabi BBQ to every doorstep. Their mission is simple — serve honest, flame-grilled food with the warmth and hospitality of Faisalabad, one Thaal at a time.
           </p>
 

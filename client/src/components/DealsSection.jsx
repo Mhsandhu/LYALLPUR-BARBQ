@@ -75,8 +75,8 @@ function DealCard({ deal, index, onClickDeal }) {
       viewport={{ once: true, margin: '-50px' }}
       className="deal-card relative overflow-visible flex flex-col cursor-pointer"
       style={{
-        background: '#141414',
-        border: '1px solid rgba(192,57,43,0.25)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-card)',
         borderRadius: '12px',
         padding: '28px',
         transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.35s ease',
@@ -90,10 +90,11 @@ function DealCard({ deal, index, onClickDeal }) {
 
       {/* Deal Name */}
       <h3
-        className="text-white font-semibold mt-4"
+        className="font-semibold mt-4"
         style={{
           fontFamily: "'Cormorant Garamond', serif",
           fontSize: '1.6rem',
+          color: 'var(--text-primary)',
         }}
       >
         {deal.dealName || deal.name}
@@ -121,7 +122,7 @@ function DealCard({ deal, index, onClickDeal }) {
       {/* Divider */}
       <div
         className="my-4"
-        style={{ height: '1px', background: 'rgba(192,57,43,0.4)' }}
+        style={{ height: '1px', background: 'var(--border-card)' }}
       />
 
       {/* Items List */}
@@ -133,7 +134,7 @@ function DealCard({ deal, index, onClickDeal }) {
             style={{
               fontFamily: "'Lora', serif",
               fontSize: '0.9rem',
-              color: '#C8C8C0',
+              color: 'var(--text-secondary)',
               lineHeight: 1.6,
             }}
           >
@@ -151,7 +152,7 @@ function DealCard({ deal, index, onClickDeal }) {
           letterSpacing: '0.15em',
           background: 'transparent',
           border: '2px solid #C0392B',
-          color: '#F5F5F0',
+          color: 'var(--text-primary)',
           borderRadius: '50px',
           padding: '16px',
           fontSize: '15px',
@@ -182,7 +183,7 @@ export default function DealsSection() {
   }, []);
 
   return (
-    <section id="deals" className="relative" style={{ background: '#080808' }}>
+    <section id="deals" className="relative" style={{ background: 'var(--bg-page)' }}>
       {/* Section content */}
       <div className="max-w-7xl mx-auto" style={{ padding: '100px clamp(24px, 5vw, 60px)' }}>
         {/* Section Header */}
@@ -199,11 +200,12 @@ export default function DealsSection() {
             Signature
           </p>
           <h2
-            className="text-white mb-4"
+            className="mb-4"
             style={{
               fontFamily: "'Cinzel Decorative', serif",
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               fontWeight: 700,
+              color: 'var(--text-primary)',
             }}
           >
             Special Thaals
@@ -232,7 +234,7 @@ export default function DealsSection() {
             }}
           >
             {[1, 2, 3].map(i => (
-              <div key={i} style={{ background: '#141414', border: '1px solid rgba(192,57,43,0.1)', borderRadius: '14px', overflow: 'hidden' }}>
+              <div key={i} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', overflow: 'hidden' }}>
                 <div className="skeleton" style={{ height: '220px', borderRadius: 0 }} />
                 <div style={{ padding: '28px' }}>
                   <div className="skeleton" style={{ height: '22px', width: '70%', marginBottom: '12px' }} />
