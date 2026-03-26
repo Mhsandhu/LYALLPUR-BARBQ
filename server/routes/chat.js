@@ -4,7 +4,7 @@ const axios = require('axios');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
 async function callGemini(apiKey, systemPrompt, contents) {
   const { data } = await axios.post(
@@ -125,7 +125,8 @@ ${menuText || 'Menu update ho raha hai, thodi der mein available hoga.'}
 
     res.json({ reply });
   } catch (err) {
-    console.error('[Chat API Error]', err.message);
+    const detail = err.response?.data || err.message;
+    console.error('[Chat API Error]', JSON.stringify(detail));
     res.status(500).json({ error: 'Chat service temporarily unavailable. Please try again.' });
   }
 });
