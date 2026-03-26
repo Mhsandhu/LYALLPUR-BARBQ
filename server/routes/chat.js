@@ -4,7 +4,7 @@ const axios = require('axios');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 async function callGemini(apiKey, systemPrompt, contents) {
   const { data } = await axios.post(
@@ -35,7 +35,7 @@ router.get('/test', async (req, res) => {
       'You are a helpful assistant.',
       [{ role: 'user', parts: [{ text: 'Say "Lyallpur BarBQ test OK" in one sentence.' }] }]
     );
-    res.json({ ok: true, reply });
+    res.json({ ok: true, model: 'gemini-2.0-flash', reply });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
