@@ -166,10 +166,10 @@ export default function ChatWidget() {
         aria-label="Open chat"
         style={{
           position: 'fixed',
-          bottom: '90px',
+          bottom: '165px',
           right: '20px',
-          width: '54px',
-          height: '54px',
+          width: '56px',
+          height: '56px',
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #C0392B, #E67E22)',
           border: 'none',
@@ -177,7 +177,7 @@ export default function ChatWidget() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 20px rgba(192,57,43,0.5)',
+          boxShadow: '0 6px 24px rgba(192,57,43,0.55)',
           zIndex: 9990,
           color: 'white',
         }}
@@ -213,7 +213,7 @@ export default function ChatWidget() {
             transition={{ duration: 0.22, ease: 'easeOut' }}
             style={{
               position: 'fixed',
-              bottom: '155px',
+              bottom: '232px',
               right: '14px',
               width: 'clamp(310px, 92vw, 370px)',
               height: 'clamp(440px, 65vh, 540px)',
@@ -249,22 +249,29 @@ export default function ChatWidget() {
                 <p style={{ margin: 0, fontFamily: "'Oswald', sans-serif", fontSize: '14px', letterSpacing: '0.08em', color: '#F5F5F0', textTransform: 'uppercase' }}>
                   Barbq Assistant
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
                   <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#2ecc71', flexShrink: 0 }} />
                   <span style={{ fontFamily: "'Lora', serif", fontSize: '11px', color: 'rgba(245,245,240,0.55)', fontStyle: 'italic' }}>
                     Online — AI Powered
                   </span>
-                  {/* Voice toggle inline with status */}
-                  <button
-                    onClick={() => { setVoiceOn((v) => { if (v) synthRef.current?.cancel(); return !v; }); }}
-                    title={voiceOn ? 'Mute AI voice' : 'Unmute AI voice'}
-                    style={{ background: 'none', border: 'none', color: voiceOn ? '#D4AC0D' : 'rgba(245,245,240,0.25)', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center', marginLeft: '2px' }}
-                  >
-                    {voiceOn ? <FiVolume2 size={13} /> : <FiVolumeX size={13} />}
-                  </button>
                 </div>
               </div>
-              {/* Close button — standalone, clearly separated */}
+              {/* Voice toggle — proper visible button */}
+              <button
+                onClick={() => { setVoiceOn((v) => { if (v) synthRef.current?.cancel(); return !v; }); }}
+                title={voiceOn ? 'Mute AI voice' : 'Unmute AI voice'}
+                style={{
+                  background: voiceOn ? 'rgba(212,172,13,0.18)' : 'rgba(255,255,255,0.08)',
+                  border: `1px solid ${voiceOn ? 'rgba(212,172,13,0.5)' : 'rgba(255,255,255,0.12)'}`,
+                  borderRadius: '50%', width: '30px', height: '30px',
+                  color: voiceOn ? '#D4AC0D' : 'rgba(245,245,240,0.35)', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, transition: 'all 0.2s',
+                }}
+              >
+                {voiceOn ? <FiVolume2 size={14} /> : <FiVolumeX size={14} />}
+              </button>
+              {/* Close button */}
               <button
                 onClick={() => setOpen(false)}
                 style={{
