@@ -1,31 +1,51 @@
 const express = require('express');
 const router = express.Router();
+const https = require('https');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
 
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_HOST = 'generativelanguage.googleapis.com';
+const GEMINI_PATH = '/v1beta/models/gemini-1.5-flash:generateContent';
 
-async function callGemini(apiKey, systemPrompt, contents) {
-  const body = {
-    system_instruction: { parts: [{ text: systemPrompt }] },
-    contents,
-    generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
-  };
+function callGemini(apiKey, systemPrompt, contents) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents,
+      generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+    });
 
-  const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    const options = {
+      hostname: GEMINI_HOST,
+      path: `${GEMINI_PATH}?key=${apiKey}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let raw = '';
+      res.on('data', (chunk) => { raw += chunk; });
+      res.on('end', () => {
+        try {
+          const data = JSON.parse(raw);
+          if (res.statusCode !== 200) {
+            return reject(new Error(data?.error?.message || `HTTP ${res.statusCode}`));
+          }
+          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          resolve(text);
+        } catch (e) {
+          reject(new Error('Failed to parse Gemini response'));
+        }
+      });
+    });
+
+    req.on('error', (e) => reject(e));
+    req.write(body);
+    req.end();
   });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    const msg = data?.error?.message || `HTTP ${res.status}`;
-    throw new Error(msg);
-  }
-
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 // GET /api/chat/ping — quick diagnostic (safe, key never exposed)
