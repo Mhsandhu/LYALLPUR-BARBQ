@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const MenuItem = require('../models/MenuItem');
+const Deal = require('../models/Deal');
 const Settings = require('../models/Settings');
 
 const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
@@ -54,9 +55,10 @@ router.post('/', async (req, res) => {
       return res.status(503).json({ error: 'AI service not configured.' });
     }
 
-    // Fetch live menu + settings in parallel
-    const [menuItems, settings] = await Promise.all([
+    // Fetch live menu, deals + settings in parallel
+    const [menuItems, deals, settings] = await Promise.all([
       MenuItem.find({ isAvailable: true }).sort({ category: 1, name: 1 }),
+      Deal.find({ isActive: true }).sort({ dealId: 1 }),
       Settings.findOne(),
     ]);
 
@@ -72,6 +74,14 @@ router.post('/', async (req, res) => {
     const menuText = Object.entries(menuByCategory)
       .map(([cat, items]) => `${cat}:\n${items.map((i) => `  • ${i}`).join('\n')}`)
       .join('\n\n');
+
+    // Build deals text
+    const dealsText = deals.length
+      ? deals.map((d) => {
+          const price = d.price && d.price > 0 ? `Rs. ${d.price}` : 'price pata karein (call/WhatsApp karein)';
+          return `  • ${d.dealName}: ${price}\n    Items: ${d.items}`;
+        }).join('\n')
+      : 'Abhi koi active deal nahi hai.';
 
     const restaurantName = settings?.restaurantName || 'Lyallpur BarBQ';
     const address = settings?.address || 'Faisalabad, Pakistan';
@@ -97,8 +107,11 @@ Phone/WhatsApp: ${phone}
 Opening Hours: ${hours}
 Delivery: ${deliveryInfo}
 
-=== Complete Menu ===
+=== Complete Menu (Individual Items) ===
 ${menuText || 'Menu update ho raha hai, thodi der mein available hoga.'}
+
+=== Special Deals / Thaals / Combos ===
+${dealsText}
 
 === Aapke Rules ===
 - Sirf restaurant, menu, food, orders, delivery, hours aur location ke baare mein jawab dein
