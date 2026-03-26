@@ -13,9 +13,9 @@ async function callGemini(apiKey, systemPrompt, contents) {
     {
       system_instruction: { parts: [{ text: systemPrompt }] },
       contents,
-      generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+      generationConfig: { temperature: 0.7, maxOutputTokens: 600, thinkingConfig: { thinkingBudget: 0 } },
     },
-    { headers: { 'Content-Type': 'application/json' }, timeout: 30000 }
+    { headers: { 'Content-Type': 'application/json' }, timeout: 55000 }
   );
   return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
