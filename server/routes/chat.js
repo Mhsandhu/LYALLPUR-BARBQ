@@ -11,6 +11,22 @@ router.get('/ping', (req, res) => {
   res.json({ ok: true, geminiKeySet: keySet, geminiKeyLength: keyLen });
 });
 
+// GET /api/chat/test — live Gemini call test
+router.get('/test', async (req, res) => {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) return res.status(503).json({ ok: false, error: 'No API key' });
+    const { GoogleGenerativeAI } = require('@google/generative-ai');
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent('Say "Lyallpur BarBQ test OK" in one sentence.');
+    const text = result.response.text();
+    res.json({ ok: true, reply: text });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message, status: err.status });
+  }
+});
+
 // POST /api/chat
 router.post('/', async (req, res) => {
   try {
