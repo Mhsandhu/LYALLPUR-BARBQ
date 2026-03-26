@@ -1,51 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const https = require('https');
+const axios = require('axios');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
 
-const GEMINI_HOST = 'generativelanguage.googleapis.com';
-const GEMINI_PATH = '/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
-function callGemini(apiKey, systemPrompt, contents) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify({
+async function callGemini(apiKey, systemPrompt, contents) {
+  const { data } = await axios.post(
+    `${GEMINI_ENDPOINT}?key=${apiKey}`,
+    {
       system_instruction: { parts: [{ text: systemPrompt }] },
       contents,
       generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
-    });
-
-    const options = {
-      hostname: GEMINI_HOST,
-      path: `${GEMINI_PATH}?key=${apiKey}`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body),
-      },
-    };
-
-    const req = https.request(options, (res) => {
-      let raw = '';
-      res.on('data', (chunk) => { raw += chunk; });
-      res.on('end', () => {
-        try {
-          const data = JSON.parse(raw);
-          if (res.statusCode !== 200) {
-            return reject(new Error(data?.error?.message || `HTTP ${res.statusCode}`));
-          }
-          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          resolve(text);
-        } catch (e) {
-          reject(new Error('Failed to parse Gemini response'));
-        }
-      });
-    });
-
-    req.on('error', (e) => reject(e));
-    req.write(body);
-    req.end();
-  });
+    },
+    { headers: { 'Content-Type': 'application/json' }, timeout: 30000 }
+  );
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 // GET /api/chat/ping — quick diagnostic (safe, key never exposed)
