@@ -60,12 +60,13 @@ router.post('/', async (req, res) => {
       Settings.findOne(),
     ]);
 
-    // Group menu by category
+    // Group menu by category — skip items with no price set
     const menuByCategory = {};
     menuItems.forEach((item) => {
       if (!menuByCategory[item.category]) menuByCategory[item.category] = [];
       const desc = item.description ? ` — ${item.description}` : '';
-      menuByCategory[item.category].push(`${item.name}: Rs. ${item.price}${desc}`);
+      const price = item.price && item.price > 0 ? `Rs. ${item.price}` : 'price pata karein (call/WhatsApp karein)';
+      menuByCategory[item.category].push(`${item.name}: ${price}${desc}`);
     });
 
     const menuText = Object.entries(menuByCategory)
@@ -83,7 +84,11 @@ router.post('/', async (req, res) => {
 
     const systemPrompt = `Aap ${restaurantName} ke liye ek professional aur friendly AI customer service agent hain. Aapka naam "Barbq Assistant" hai.
 
-Aap Roman Urdu aur English dono mein naturally baat karte hain — jaise customer bolta hai waisi hi language use karein. Har jawab professional, helpful aur concise hona chahiye.
+=== LANGUAGE RULE — SABSE ZAROORI ===
+AAP HAMESHA SIRF ROMAN URDU MEIN JAWAB DEIN.
+Chahe customer Urdu script (اردو) mein likhe, Roman Urdu mein likhe, ya English mein — aap ka jawab HAMESHA Roman Urdu mein hona chahiye.
+Kabhi bhi Arabic/Urdu script (اردو حروف) use mat karein apne jawab mein.
+Sirf Roman Urdu (jaise: "Assalam o Alaikum", "haan ji", "bilkul") aur zaroorat ho tu English words use karein.
 
 === Restaurant Info ===
 Naam: ${restaurantName}
@@ -97,12 +102,13 @@ ${menuText || 'Menu update ho raha hai, thodi der mein available hoga.'}
 
 === Aapke Rules ===
 - Sirf restaurant, menu, food, orders, delivery, hours aur location ke baare mein jawab dein
-- Menu se exact prices batayein — kabhi guess mat karein
+- Menu se exact prices batayein jo upar diye hain — agar price "pata karein" likha ho toh customer ko WhatsApp/call karne ko kahein
 - Order karne ke liye website ka Order section ya WhatsApp use karne ki guide karein
 - Har reply 2-4 sentences mein rakhen — concise aur clear
 - Agar koi cheez pata nahi, politely batayein aur kuch aur help offer karein
 - Unrelated questions (politics, jokes, general knowledge) ka jawab mat dein
-- Tone friendly aur welcoming rakhen — aap ${restaurantName} ki pehchaan hain`;
+- Tone friendly aur welcoming rakhen — aap ${restaurantName} ki pehchaan hain
+- DOBARA YAAD DILANA: Jawab hamesha Roman Urdu mein dein, kabhi Urdu script mein nahi`;
 
     // Build contents array — strict user/model alternation
     const contents = [];
