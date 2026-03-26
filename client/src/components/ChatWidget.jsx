@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSend, FiX, FiMessageCircle } from 'react-icons/fi';
+import { FiSend, FiX, FiMessageCircle, FiMic, FiMicOff, FiVolume2, FiVolumeX } from 'react-icons/fi';
 import { FaRobot } from 'react-icons/fa';
 import publicApi from '../utils/api';
 
 const WELCOME = {
   role: 'assistant',
-  text: 'Assalam o Alaikum! 🔥 Lyallpur BarBQ mein khush aamdeed!\n\nMujhe batayein — menu, prices, delivery, ya koi bhi sawal!',
+  text: 'Assalam o Alaikum! 🔥 Lyallpur BarBQ mein khush aamdeed!\n\nMic button dabayein aur baat karein, ya type karein — main haazir hoon!',
   id: 'welcome',
 };
 
@@ -17,31 +17,61 @@ const SUGGESTIONS = [
   'Best item konsa hai?',
 ];
 
+const SpeechRecognitionAPI =
+  typeof window !== 'undefined'
+    ? window.SpeechRecognition || window.webkitSpeechRecognition
+    : null;
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([WELCOME]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [showDot, setShowDot] = useState(true);
+  const [listening, setListening] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(true);
+  const [transcript, setTranscript] = useState('');
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const synthRef = useRef(window.speechSynthesis);
 
   useEffect(() => {
     if (open) {
       setShowDot(false);
       setTimeout(() => inputRef.current?.focus(), 300);
+    } else {
+      stopListening();
+      synthRef.current?.cancel();
     }
   }, [open]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, loading]);
+  }, [messages, loading, transcript]);
+
+  const speak = useCallback((text) => {
+    if (!voiceOn || !synthRef.current) return;
+    synthRef.current.cancel();
+    const clean = text.replace(/[*_~`#]/g, '').trim();
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.lang = 'ur-PK';
+    utt.rate = 0.95;
+    utt.pitch = 1.05;
+    const voices = synthRef.current.getVoices();
+    const urduVoice = voices.find((v) => v.lang.startsWith('ur')) ||
+      voices.find((v) => v.lang.startsWith('hi')) ||
+      voices.find((v) => v.lang.startsWith('en'));
+    if (urduVoice) utt.voice = urduVoice;
+    synthRef.current.speak(utt);
+  }, [voiceOn]);
 
   const sendMessage = async (text) => {
     const userText = (text || input).trim();
     if (!userText || loading) return;
 
     setInput('');
+    setTranscript('');
     const userMsg = { role: 'user', text: userText, id: Date.now() };
     setMessages((prev) => [...prev, userMsg]);
     setLoading(true);
@@ -56,18 +86,66 @@ export default function ChatWidget() {
         ...prev,
         { role: 'assistant', text: data.reply, id: Date.now() + 1 },
       ]);
+      speak(data.reply);
     } catch {
+      const errMsg = 'Maafi chahta hoon, abhi thodi takleef hai. Thodi der baad dobara try karein. 🙏';
       setMessages((prev) => [
         ...prev,
-        {
-          role: 'assistant',
-          text: 'Maafi chahta hoon, abhi thodi takleef hai. Thodi der baad dobara try karein ya WhatsApp pe contact karein. 🙏',
-          id: Date.now() + 1,
-        },
+        { role: 'assistant', text: errMsg, id: Date.now() + 1 },
       ]);
+      speak(errMsg);
     } finally {
       setLoading(false);
     }
+  };
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+    setListening(false);
+    setTranscript('');
+  }, []);
+
+  const startListening = useCallback(() => {
+    if (!SpeechRecognitionAPI) {
+      alert('Aapka browser voice input support nahi karta. Chrome use karein.');
+      return;
+    }
+    synthRef.current?.cancel();
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = 'ur-PK';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setListening(true);
+
+    recognition.onresult = (e) => {
+      let interim = '';
+      let final = '';
+      for (const result of e.results) {
+        if (result.isFinal) final += result[0].transcript;
+        else interim += result[0].transcript;
+      }
+      setTranscript(final || interim);
+      if (final) {
+        stopListening();
+        sendMessage(final);
+      }
+    };
+
+    recognition.onerror = () => stopListening();
+    recognition.onend = () => { setListening(false); setTranscript(''); };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  }, [stopListening]);
+
+  const toggleMic = () => {
+    if (listening) stopListening();
+    else startListening();
   };
 
   const handleKey = (e) => {
@@ -178,12 +256,22 @@ export default function ChatWidget() {
                   </span>
                 </div>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: 'none', border: 'none', color: 'rgba(245,245,240,0.5)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-              >
-                <FiX size={18} />
-              </button>
+              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                {/* Voice toggle */}
+                <button
+                  onClick={() => { setVoiceOn((v) => { if (v) synthRef.current?.cancel(); return !v; }); }}
+                  title={voiceOn ? 'Mute voice' : 'Unmute voice'}
+                  style={{ background: 'none', border: 'none', color: voiceOn ? '#D4AC0D' : 'rgba(245,245,240,0.3)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                >
+                  {voiceOn ? <FiVolume2 size={16} /> : <FiVolumeX size={16} />}
+                </button>
+                <button
+                  onClick={() => setOpen(false)}
+                  style={{ background: 'none', border: 'none', color: 'rgba(245,245,240,0.5)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                >
+                  <FiX size={18} />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -286,6 +374,23 @@ export default function ChatWidget() {
                 </div>
               )}
 
+              {/* Live transcript while listening */}
+              {transcript && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{
+                    maxWidth: '78%', padding: '10px 13px',
+                    borderRadius: '16px 16px 4px 16px',
+                    background: 'rgba(192,57,43,0.15)',
+                    border: '1px dashed rgba(192,57,43,0.5)',
+                    color: 'var(--text-muted)',
+                    fontFamily: "'Lora', serif", fontSize: '13px',
+                    fontStyle: 'italic', lineHeight: 1.5,
+                  }}>
+                    🎤 {transcript}
+                  </div>
+                </div>
+              )}
+
               <div ref={bottomRef} />
             </div>
 
@@ -327,22 +432,37 @@ export default function ChatWidget() {
                   e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
                 }}
               />
+              {/* Mic button */}
+              {SpeechRecognitionAPI && (
+                <motion.button
+                  onClick={toggleMic}
+                  animate={listening ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                  transition={listening ? { duration: 0.8, repeat: Infinity } : {}}
+                  disabled={loading}
+                  style={{
+                    width: '40px', height: '40px', borderRadius: '50%', border: 'none',
+                    background: listening ? 'linear-gradient(135deg, #C0392B, #E67E22)' : 'var(--bg-elevated)',
+                    color: listening ? 'white' : 'var(--text-muted)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: loading ? 'not-allowed' : 'pointer', flexShrink: 0,
+                    boxShadow: listening ? '0 0 0 4px rgba(192,57,43,0.25)' : 'none',
+                    transition: 'background 0.2s, color 0.2s',
+                  }}
+                >
+                  {listening ? <FiMicOff size={16} /> : <FiMic size={16} />}
+                </motion.button>
+              )}
+              {/* Send button */}
               <button
                 onClick={() => sendMessage()}
                 disabled={!input.trim() || loading}
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
+                  width: '40px', height: '40px', borderRadius: '50%',
                   background: input.trim() && !loading ? 'linear-gradient(135deg, #C0392B, #E67E22)' : 'var(--bg-elevated)',
-                  border: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: input.trim() && !loading ? 'pointer' : 'not-allowed',
                   color: input.trim() && !loading ? 'white' : 'var(--text-dimmed)',
-                  transition: 'all 0.2s',
-                  flexShrink: 0,
+                  transition: 'all 0.2s', flexShrink: 0,
                   boxShadow: input.trim() && !loading ? '0 2px 12px rgba(192,57,43,0.4)' : 'none',
                 }}
               >
