@@ -94,6 +94,7 @@ app.use('/api/menu', require('./routes/menu'));
 app.use('/api/deals', require('./routes/deals'));
 app.use('/api/customers', require('./routes/customers'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/chat', require('./routes/chat'));
 
 // Health check route
 app.get('/api/health', async (req, res) => {
