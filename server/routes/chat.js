@@ -5,7 +5,7 @@ const MenuItem = require('../models/MenuItem');
 const Deal = require('../models/Deal');
 const Settings = require('../models/Settings');
 
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent';
 
 async function callGemini(apiKey, systemPrompt, contents) {
   const { data } = await axios.post(
