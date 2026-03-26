@@ -4,6 +4,13 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
 
+// GET /api/chat/ping — quick diagnostic (safe, key never exposed)
+router.get('/ping', (req, res) => {
+  const keySet = !!(process.env.GEMINI_API_KEY);
+  const keyLen = process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.length : 0;
+  res.json({ ok: true, geminiKeySet: keySet, geminiKeyLength: keyLen });
+});
+
 // POST /api/chat
 router.post('/', async (req, res) => {
   try {
