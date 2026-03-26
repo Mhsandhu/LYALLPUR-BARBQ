@@ -249,29 +249,34 @@ export default function ChatWidget() {
                 <p style={{ margin: 0, fontFamily: "'Oswald', sans-serif", fontSize: '14px', letterSpacing: '0.08em', color: '#F5F5F0', textTransform: 'uppercase' }}>
                   Barbq Assistant
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px' }}>
                   <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#2ecc71', flexShrink: 0 }} />
                   <span style={{ fontFamily: "'Lora', serif", fontSize: '11px', color: 'rgba(245,245,240,0.55)', fontStyle: 'italic' }}>
                     Online — AI Powered
                   </span>
+                  {/* Voice toggle inline with status */}
+                  <button
+                    onClick={() => { setVoiceOn((v) => { if (v) synthRef.current?.cancel(); return !v; }); }}
+                    title={voiceOn ? 'Mute AI voice' : 'Unmute AI voice'}
+                    style={{ background: 'none', border: 'none', color: voiceOn ? '#D4AC0D' : 'rgba(245,245,240,0.25)', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center', marginLeft: '2px' }}
+                  >
+                    {voiceOn ? <FiVolume2 size={13} /> : <FiVolumeX size={13} />}
+                  </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                {/* Voice toggle */}
-                <button
-                  onClick={() => { setVoiceOn((v) => { if (v) synthRef.current?.cancel(); return !v; }); }}
-                  title={voiceOn ? 'Mute voice' : 'Unmute voice'}
-                  style={{ background: 'none', border: 'none', color: voiceOn ? '#D4AC0D' : 'rgba(245,245,240,0.3)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-                >
-                  {voiceOn ? <FiVolume2 size={16} /> : <FiVolumeX size={16} />}
-                </button>
-                <button
-                  onClick={() => setOpen(false)}
-                  style={{ background: 'none', border: 'none', color: 'rgba(245,245,240,0.5)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-                >
-                  <FiX size={18} />
-                </button>
-              </div>
+              {/* Close button — standalone, clearly separated */}
+              <button
+                onClick={() => setOpen(false)}
+                style={{
+                  background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)',
+                  borderRadius: '50%', width: '30px', height: '30px',
+                  color: 'rgba(245,245,240,0.7)', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <FiX size={15} />
+              </button>
             </div>
 
             {/* Messages */}

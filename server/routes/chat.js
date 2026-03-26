@@ -71,16 +71,25 @@ ${menuText || 'Menu is currently being updated.'}
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
-      systemInstruction: systemPrompt,
+      systemInstruction: {
+        role: 'system',
+        parts: [{ text: systemPrompt }],
+      },
     });
 
-    // Map history for Gemini format
-    const geminiHistory = history
-      .filter((m) => m.role && m.text)
-      .map((m) => ({
-        role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: m.text }],
-      }));
+    // Map history for Gemini — must alternate user/model, start with user
+    const geminiHistory = [];
+    const validHistory = history.filter((m) => m.role && m.text && m.text.trim());
+    for (const m of validHistory) {
+      const role = m.role === 'user' ? 'user' : 'model';
+      // Skip consecutive same-role entries (Gemini requires strict alternation)
+      if (geminiHistory.length > 0 && geminiHistory[geminiHistory.length - 1].role === role) continue;
+      geminiHistory.push({ role, parts: [{ text: m.text.trim() }] });
+    }
+    // History must start with 'user' if non-empty
+    if (geminiHistory.length > 0 && geminiHistory[0].role !== 'user') {
+      geminiHistory.shift();
+    }
 
     const chat = model.startChat({ history: geminiHistory });
     const result = await chat.sendMessage(message.trim());
@@ -89,7 +98,12 @@ ${menuText || 'Menu is currently being updated.'}
     res.json({ reply });
   } catch (err) {
     console.error('[Chat API Error]', err.message);
-    res.status(500).json({ error: 'Chat service temporarily unavailable. Please try again.' });
+    console.error('[Chat API Stack]', err.stack);
+    const status = err.status || 500;
+    res.status(status).json({
+      error: 'Chat service temporarily unavailable. Please try again.',
+      code: err.message || 'UNKNOWN',
+    });
   }
 });
 
