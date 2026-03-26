@@ -1,14 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const MenuItem = require('../models/MenuItem');
 const Settings = require('../models/Settings');
+
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+async function callGemini(apiKey, systemPrompt, contents) {
+  const body = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents,
+    generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+  };
+
+  const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    const msg = data?.error?.message || `HTTP ${res.status}`;
+    throw new Error(msg);
+  }
+
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
 
 // GET /api/chat/ping — quick diagnostic (safe, key never exposed)
 router.get('/ping', (req, res) => {
   const keySet = !!(process.env.GEMINI_API_KEY);
-  const keyLen = process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.length : 0;
-  res.json({ ok: true, geminiKeySet: keySet, geminiKeyLength: keyLen });
+  res.json({ ok: true, geminiKeySet: keySet, geminiKeyLength: keySet ? process.env.GEMINI_API_KEY.length : 0 });
 });
 
 // GET /api/chat/test — live Gemini call test
@@ -16,14 +39,14 @@ router.get('/test', async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) return res.status(503).json({ ok: false, error: 'No API key' });
-    const { GoogleGenerativeAI } = require('@google/generative-ai');
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    const result = await model.generateContent('Say "Lyallpur BarBQ test OK" in one sentence.');
-    const text = result.response.text();
-    res.json({ ok: true, reply: text });
+    const reply = await callGemini(
+      apiKey,
+      'You are a helpful assistant.',
+      [{ role: 'user', parts: [{ text: 'Say "Lyallpur BarBQ test OK" in one sentence.' }] }]
+    );
+    res.json({ ok: true, reply });
   } catch (err) {
-    res.status(500).json({ ok: false, error: err.message, status: err.status });
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
@@ -59,74 +82,60 @@ router.post('/', async (req, res) => {
       .join('\n\n');
 
     const restaurantName = settings?.restaurantName || 'Lyallpur BarBQ';
-    const address = settings?.address || 'Lyallpur, Pakistan';
+    const address = settings?.address || 'Faisalabad, Pakistan';
     const phone = settings?.phone || 'N/A';
     const hours = settings?.openingHours || '12:00 PM – 12:00 AM';
-    const deliveryAvailable = settings?.deliveryAvailable;
     const deliveryCharge = settings?.deliveryCharge || 0;
-    const deliveryInfo = deliveryAvailable
-      ? `Yes, delivery is available. Delivery charge: Rs. ${deliveryCharge}`
-      : 'Delivery is not currently available. Dine-in and takeaway only.';
+    const deliveryInfo = settings?.deliveryAvailable
+      ? `Haan, delivery available hai. Delivery charge: Rs. ${deliveryCharge}`
+      : 'Abhi delivery available nahi hai. Dine-in ya takeaway ho sakta hai.';
 
-    const systemPrompt = `You are a helpful and friendly AI customer service agent for ${restaurantName}, a traditional BBQ restaurant in Pakistan. Your name is "Barbq Assistant".
+    const systemPrompt = `Aap ${restaurantName} ke liye ek professional aur friendly AI customer service agent hain. Aapka naam "Barbq Assistant" hai.
 
-You speak naturally in both English and Roman Urdu (mix them as the customer does). Be warm, concise, and helpful.
+Aap Roman Urdu aur English dono mein naturally baat karte hain — jaise customer bolta hai waisi hi language use karein. Har jawab professional, helpful aur concise hona chahiye.
 
 === Restaurant Info ===
-Name: ${restaurantName}
+Naam: ${restaurantName}
 Address: ${address}
 Phone/WhatsApp: ${phone}
 Opening Hours: ${hours}
 Delivery: ${deliveryInfo}
 
-=== Full Menu ===
-${menuText || 'Menu is currently being updated.'}
+=== Complete Menu ===
+${menuText || 'Menu update ho raha hai, thodi der mein available hoga.'}
 
-=== Your Rules ===
-- Only answer questions about the restaurant, menu, food, orders, delivery, hours, and location
-- Give exact prices from the menu above — never guess or make up prices
-- For placing orders, guide customers to use the Order section on the website or call/WhatsApp
-- Keep replies short and conversational (2–4 sentences)
-- If you don't know something, say so politely and offer to help with something else
-- Do NOT answer unrelated questions (politics, jokes, general knowledge, etc.)
-- Use a friendly tone — you represent ${restaurantName}`;
+=== Aapke Rules ===
+- Sirf restaurant, menu, food, orders, delivery, hours aur location ke baare mein jawab dein
+- Menu se exact prices batayein — kabhi guess mat karein
+- Order karne ke liye website ka Order section ya WhatsApp use karne ki guide karein
+- Har reply 2-4 sentences mein rakhen — concise aur clear
+- Agar koi cheez pata nahi, politely batayein aur kuch aur help offer karein
+- Unrelated questions (politics, jokes, general knowledge) ka jawab mat dein
+- Tone friendly aur welcoming rakhen — aap ${restaurantName} ki pehchaan hain`;
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction: {
-        role: 'system',
-        parts: [{ text: systemPrompt }],
-      },
-    });
-
-    // Map history for Gemini — must alternate user/model, start with user
-    const geminiHistory = [];
+    // Build contents array — strict user/model alternation
+    const contents = [];
     const validHistory = history.filter((m) => m.role && m.text && m.text.trim());
     for (const m of validHistory) {
       const role = m.role === 'user' ? 'user' : 'model';
-      // Skip consecutive same-role entries (Gemini requires strict alternation)
-      if (geminiHistory.length > 0 && geminiHistory[geminiHistory.length - 1].role === role) continue;
-      geminiHistory.push({ role, parts: [{ text: m.text.trim() }] });
+      if (contents.length > 0 && contents[contents.length - 1].role === role) continue;
+      contents.push({ role, parts: [{ text: m.text.trim() }] });
     }
-    // History must start with 'user' if non-empty
-    if (geminiHistory.length > 0 && geminiHistory[0].role !== 'user') {
-      geminiHistory.shift();
-    }
+    // Must start with user
+    if (contents.length > 0 && contents[0].role !== 'user') contents.shift();
+    // Add current message
+    contents.push({ role: 'user', parts: [{ text: message.trim() }] });
 
-    const chat = model.startChat({ history: geminiHistory });
-    const result = await chat.sendMessage(message.trim());
-    const reply = result.response.text();
+    const reply = await callGemini(apiKey, systemPrompt, contents);
+
+    if (!reply) {
+      return res.status(500).json({ error: 'Empty response from AI.' });
+    }
 
     res.json({ reply });
   } catch (err) {
     console.error('[Chat API Error]', err.message);
-    console.error('[Chat API Stack]', err.stack);
-    const status = err.status || 500;
-    res.status(status).json({
-      error: 'Chat service temporarily unavailable. Please try again.',
-      code: err.message || 'UNKNOWN',
-    });
+    res.status(500).json({ error: 'Chat service temporarily unavailable. Please try again.' });
   }
 });
 
